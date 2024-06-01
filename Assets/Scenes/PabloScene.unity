@@ -154,6 +154,71 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1017686702}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &250022267
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2539267667072379952, guid: fb62ee9b486230040ab7db9c852a3ba1, type: 3}
+      propertyPath: m_Name
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 5089205984144658321, guid: fb62ee9b486230040ab7db9c852a3ba1, type: 3}
+      propertyPath: firePoint
+      value: 
+      objectReference: {fileID: 805959601}
+    - target: {fileID: 5089205984144658321, guid: fb62ee9b486230040ab7db9c852a3ba1, type: 3}
+      propertyPath: rangedAttackPrefab
+      value: 
+      objectReference: {fileID: 805959594}
+    - target: {fileID: 8857526199102251812, guid: fb62ee9b486230040ab7db9c852a3ba1, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -6.498386
+      objectReference: {fileID: 0}
+    - target: {fileID: 8857526199102251812, guid: fb62ee9b486230040ab7db9c852a3ba1, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.58055836
+      objectReference: {fileID: 0}
+    - target: {fileID: 8857526199102251812, guid: fb62ee9b486230040ab7db9c852a3ba1, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8857526199102251812, guid: fb62ee9b486230040ab7db9c852a3ba1, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8857526199102251812, guid: fb62ee9b486230040ab7db9c852a3ba1, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8857526199102251812, guid: fb62ee9b486230040ab7db9c852a3ba1, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8857526199102251812, guid: fb62ee9b486230040ab7db9c852a3ba1, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8857526199102251812, guid: fb62ee9b486230040ab7db9c852a3ba1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8857526199102251812, guid: fb62ee9b486230040ab7db9c852a3ba1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8857526199102251812, guid: fb62ee9b486230040ab7db9c852a3ba1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: fb62ee9b486230040ab7db9c852a3ba1, type: 3}
 --- !u!1 &484320851
 GameObject:
   m_ObjectHideFlags: 0
@@ -607,6 +672,16 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 805913890}
   m_CullTransparentMesh: 1
+--- !u!1 &805959594 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2539267667072379952, guid: fb62ee9b486230040ab7db9c852a3ba1, type: 3}
+  m_PrefabInstance: {fileID: 250022267}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &805959601 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8857526199102251812, guid: fb62ee9b486230040ab7db9c852a3ba1, type: 3}
+  m_PrefabInstance: {fileID: 250022267}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &814617606
 GameObject:
   m_ObjectHideFlags: 0
@@ -620,7 +695,7 @@ GameObject:
   - component: {fileID: 814617608}
   - component: {fileID: 814617607}
   m_Layer: 3
-  m_Name: LasersType2 (1)
+  m_Name: LasersType2 Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -675,6 +750,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   healt: 10
+  bossController: {fileID: 1322328831}
   speed: 5
   laserPrefab: {fileID: 4524279025412847516, guid: 528a344d8f0f83e4194cd6528921742d, type: 3}
   firePoint: {fileID: 0}
@@ -683,6 +759,7 @@ MonoBehaviour:
   cooldownScale: 0.3
   minAngle: -75
   maxAngle: -15
+  isPhase1: 0
   trailLaserTransform: {fileID: 563480773}
 --- !u!212 &814617609
 SpriteRenderer:
@@ -744,13 +821,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 814617606}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: -0.60876137, w: 0.7933534}
-  m_LocalPosition: {x: 7.92, y: 3.91, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0.60876137, w: 0.7933534}
+  m_LocalPosition: {x: 9.381563, y: 3.3040187, z: -0.014600469}
   m_LocalScale: {x: 0.20602436, y: 0.20602436, z: 0.20602432}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 563480773}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1417124632}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -75}
 --- !u!1 &827050541
 GameObject:
@@ -879,12 +956,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 832229930}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.4615635, y: -0.6059813, z: -0.014600469}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1417124632}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &906479117
 GameObject:
@@ -1098,7 +1175,7 @@ GameObject:
   - component: {fileID: 1017686703}
   - component: {fileID: 1017686705}
   m_Layer: 3
-  m_Name: LasersType1 (1)
+  m_Name: LasersType1 Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1113,12 +1190,12 @@ Transform:
   m_GameObject: {fileID: 1017686701}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: 0.7117926, w: 0.7023898}
-  m_LocalPosition: {x: -8.08, y: -4.23, z: 0}
-  m_LocalScale: {x: 0.17121613, y: 0.17121613, z: 0.17121609}
+  m_LocalPosition: {x: -6.6184363, y: -4.8359814, z: -0.014600469}
+  m_LocalScale: {x: 0.17121615, y: 0.17121615, z: 0.17121609}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 181253849}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1417124632}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90.762}
 --- !u!114 &1017686703
 MonoBehaviour:
@@ -1134,6 +1211,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   healt: 10
+  bossController: {fileID: 1322328831}
   speed: 5
   laserPrefab: {fileID: 4524279025412847516, guid: 528a344d8f0f83e4194cd6528921742d, type: 3}
   firePoint: {fileID: 181253849}
@@ -1142,6 +1220,7 @@ MonoBehaviour:
   cooldownScale: 0
   minAngle: 0
   maxAngle: 0
+  isPhase1: 0
   trailLaserTransform: {fileID: 0}
 --- !u!212 &1017686704
 SpriteRenderer:
@@ -1564,10 +1643,16 @@ MonoBehaviour:
     memoria en Colab
   - Anai definitivamente no se unira al lado del mal, por lo tanto deberas luchar
     contra el
+  TextBg: {fileID: 0}
   IAdolfResponse: {fileID: 1847101602}
   countAnswer: 0
   playerAnswer: 0
   playerIsHere: 0
+  laserController:
+  - {fileID: 1958786458}
+  - {fileID: 1017686703}
+  - {fileID: 1846983371}
+  - {fileID: 814617608}
   bossPhase: 0
 --- !u!1 &1392230417
 GameObject:
@@ -1702,6 +1787,42 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1392230417}
   m_CullTransparentMesh: 1
+--- !u!1 &1417124631
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1417124632}
+  m_Layer: 0
+  m_Name: ------PHASE 2-------
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1417124632
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1417124631}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.4615635, y: 0.6059813, z: 0.014600469}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 832229931}
+  - {fileID: 1958786460}
+  - {fileID: 1017686702}
+  - {fileID: 1846983373}
+  - {fileID: 814617610}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1719947455
 GameObject:
   m_ObjectHideFlags: 0
@@ -2119,7 +2240,7 @@ GameObject:
   - component: {fileID: 1846983371}
   - component: {fileID: 1846983370}
   m_Layer: 3
-  m_Name: LasersType2
+  m_Name: LasersType2 Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2174,6 +2295,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   healt: 10
+  bossController: {fileID: 1322328831}
   speed: 5
   laserPrefab: {fileID: 4524279025412847516, guid: 528a344d8f0f83e4194cd6528921742d, type: 3}
   firePoint: {fileID: 0}
@@ -2182,6 +2304,7 @@ MonoBehaviour:
   cooldownScale: 0.3
   minAngle: 15
   maxAngle: 75
+  isPhase1: 0
   trailLaserTransform: {fileID: 1830609655}
 --- !u!212 &1846983372
 SpriteRenderer:
@@ -2243,13 +2366,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1846983369}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0.60876137, w: 0.7933534}
-  m_LocalPosition: {x: -7.8599997, y: 3.91, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: 0.60876137, w: 0.7933534}
+  m_LocalPosition: {x: -6.398436, y: 3.3040187, z: -0.014600469}
   m_LocalScale: {x: 0.20602436, y: 0.20602436, z: 0.20602432}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1830609655}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1417124632}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 75}
 --- !u!1 &1847101600
 GameObject:
@@ -2330,37 +2453,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1847101600}
   m_CullTransparentMesh: 1
---- !u!1 &1928661118
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1928661119}
-  m_Layer: 0
-  m_Name: Anai
-  m_TagString: Player
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1928661119
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1928661118}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.559826, y: -0.16609785, z: 0.050179295}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1958786457
 GameObject:
   m_ObjectHideFlags: 0
@@ -2374,7 +2466,7 @@ GameObject:
   - component: {fileID: 1958786458}
   - component: {fileID: 1958786461}
   m_Layer: 3
-  m_Name: LasersType1
+  m_Name: LasersType1 Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2394,6 +2486,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   healt: 10
+  bossController: {fileID: 1322328831}
   speed: 5
   laserPrefab: {fileID: 4524279025412847516, guid: 528a344d8f0f83e4194cd6528921742d, type: 3}
   firePoint: {fileID: 635970263}
@@ -2402,6 +2495,7 @@ MonoBehaviour:
   cooldownScale: 0
   minAngle: 0
   maxAngle: 0
+  isPhase1: 0
   trailLaserTransform: {fileID: 0}
 --- !u!212 &1958786459
 SpriteRenderer:
@@ -2464,12 +2558,12 @@ Transform:
   m_GameObject: {fileID: 1958786457}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: 0.7117926, w: 0.7023898}
-  m_LocalPosition: {x: 8.06, y: -4.16, z: 0}
-  m_LocalScale: {x: 0.17121613, y: 0.17121613, z: 0.17121609}
+  m_LocalPosition: {x: 9.521564, y: -4.765981, z: -0.014600469}
+  m_LocalScale: {x: 0.17121615, y: 0.17121615, z: 0.17121609}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 635970263}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1417124632}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90.762}
 --- !u!58 &1958786461
 CircleCollider2D:
@@ -2513,11 +2607,7 @@ SceneRoots:
   - {fileID: 1769176121}
   - {fileID: 1322328830}
   - {fileID: 1003189844}
-  - {fileID: 1928661119}
   - {fileID: 827050545}
   - {fileID: 1830105511}
-  - {fileID: 1958786460}
-  - {fileID: 1017686702}
-  - {fileID: 832229931}
-  - {fileID: 1846983373}
-  - {fileID: 814617610}
+  - {fileID: 1417124632}
+  - {fileID: 250022267}
