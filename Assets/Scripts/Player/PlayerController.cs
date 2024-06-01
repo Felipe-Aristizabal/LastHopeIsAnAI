@@ -16,6 +16,16 @@ public class PlayerController : MonoBehaviour
     private PlayerPowerUps playerPowerUps;
     private bool isTakingDamage = false;
 
+
+    private enum AttackMode { Melee, Ranged }
+    private AttackMode currentAttackMode = AttackMode.Melee;
+
+    [SerializeField] private Sprite meleeSprite;
+    [SerializeField] private Sprite rangedSprite;
+    [SerializeField] private GameObject rangedAttackPrefab;
+    [SerializeField] private Transform firePoint;
+
+
     private void Awake()
     {
         playerControls = new PlayerControls();
@@ -66,6 +76,52 @@ public class PlayerController : MonoBehaviour
 
         myAnimator.SetFloat("moveX", movement.x);
         myAnimator.SetFloat("moveY", movement.y);
+
+        if (Input.GetMouseButtonDown(1)) // Right click to switch modes
+        {
+            SwitchAttackMode();
+        }
+
+        if (Input.GetMouseButtonDown(0)) // Left click to attack
+        {
+            Attack();
+        }
+    }
+
+    private void SwitchAttackMode()
+    {
+        if (currentAttackMode == AttackMode.Melee)
+        {
+            currentAttackMode = AttackMode.Ranged;
+            mySpriteRenderer.sprite = rangedSprite;
+        }
+        else
+        {
+            currentAttackMode = AttackMode.Melee;
+            mySpriteRenderer.sprite = meleeSprite;
+        }
+    }
+
+    private void Attack()
+    {
+        if (currentAttackMode == AttackMode.Melee)
+        {
+            // Implement melee attack logic
+            Debug.Log("Performing melee attack");
+            myAnimator.SetTrigger("MeleeAttack");
+        }
+        else if (currentAttackMode == AttackMode.Ranged)
+        {
+            // Implement ranged attack logic
+            Debug.Log("Performing ranged attack");
+            PerformRangedAttack();
+        }
+    }
+
+    private void PerformRangedAttack()
+    {
+        GameObject rangedAttack = Instantiate(rangedAttackPrefab, firePoint.position, Quaternion.identity);
+        // Add logic to move the ranged attack or add additional effects
     }
 
     private void Move()

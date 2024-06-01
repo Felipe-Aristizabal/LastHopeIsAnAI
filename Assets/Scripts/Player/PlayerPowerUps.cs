@@ -6,7 +6,17 @@ public class PlayerPowerUps : MonoBehaviour
 
     void Awake()
     {
-        powerUp = new PowerUp(3f, 10f, 1f, false, 100);
+        powerUp = new PowerUp(
+            5f, 
+            10f, 
+            1.5f, 
+            false, 
+            100, 
+            6f, 
+            2f
+        );
+        powerUp.SavePowerUps();
         powerUp.LoadPowerUps();
+        powerUp.SetInstance(powerUp);
     }
 }

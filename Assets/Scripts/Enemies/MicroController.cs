@@ -16,6 +16,9 @@ public class MicroController : MonoBehaviour
     private Vector3 randomDirection;
     private float nextMoveChangeTime;
     private bool isExploding = false;
+    private Color originalColor;
+    private Vector3 originalScale;
+
 
     void Start()
     {
@@ -38,6 +41,9 @@ public class MicroController : MonoBehaviour
         {
             Debug.LogError("Player not found in the scene!");
         }
+
+        originalColor = spriteRenderer.color;
+        originalScale = transform.localScale;
     }
 
     void FixedUpdate()
@@ -89,11 +95,11 @@ public class MicroController : MonoBehaviour
     {
         if (player.position.x > transform.position.x)
         {
-            spriteRenderer.flipX = true;
+            spriteRenderer.flipX = false;
         }
         else
         {
-            spriteRenderer.flipX = false;
+            spriteRenderer.flipX = true;
         }
     }
 
@@ -104,12 +110,17 @@ public class MicroController : MonoBehaviour
         Color originalColor = spriteRenderer.color;
         Color targetColor = Color.red;
 
+        Vector3 originalScale = transform.localScale;
+        Vector3 targetScale = Vector3.Min(originalScale * 1.2f, new Vector3(3f, 3f, 3f));
+
         float elapsedTime = 0f;
         float duration = 1f;
 
         while (elapsedTime < duration)
         {
-            spriteRenderer.color = Color.Lerp(originalColor, targetColor, elapsedTime / duration);
+            float t = elapsedTime / duration;
+            spriteRenderer.color = Color.Lerp(originalColor, targetColor, t);
+            transform.localScale = Vector3.Lerp(originalScale, targetScale, t);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
@@ -117,6 +128,28 @@ public class MicroController : MonoBehaviour
         Instantiate(explosionPrefab, transform.position, Quaternion.identity);
 
         gameObject.SetActive(false);
+    }
+
+    IEnumerator ResetMicroAnimation()
+    {
+        float elapsedTime = 0f;
+        float duration = 1f;
+
+        Color startColor = spriteRenderer.color;
+        Vector3 startScale = transform.localScale;
+
+        while (elapsedTime < duration)
+        {
+            float t = elapsedTime / duration;
+            spriteRenderer.color = Color.Lerp(startColor, originalColor, t);
+            transform.localScale = Vector3.Lerp(startScale, originalScale, t);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        spriteRenderer.color = originalColor;
+        transform.localScale = originalScale;
+        isExploding = false;
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -134,6 +167,8 @@ public class MicroController : MonoBehaviour
         {
             isPlayerInRange = false;
             animator.SetBool("isRunning", false); 
+            StopAllCoroutines(); // Stop the explode coroutine if it's running
+            StartCoroutine(ResetMicroAnimation());
         }
     }
 }
