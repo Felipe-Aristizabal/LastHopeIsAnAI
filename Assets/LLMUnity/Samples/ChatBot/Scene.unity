@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657832, g: 0.49641222, b: 0.57481664, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -684,14 +684,13 @@ MonoBehaviour:
   ignoreEos: 0
   nKeep: -1
   stop: []
-  grammarString: 
   playerName: user
   AIName: assistant
   prompt: A chat between a curious human and an artificial intelligence assistant.
     The assistant gives helpful, detailed, and polite answers to the human's questions.
-  chatTemplate: chatml
   setNKeepToPrompt: 1
-  modelHide: 1
+  chatTemplate: phi-3
+  grammarString: 
   numThreads: -1
   numGPULayers: 0
   parallelPrompts: -1
@@ -699,13 +698,14 @@ MonoBehaviour:
   asynchronousStartup: 0
   remote: 0
   killExistingServersOnStart: 1
-  model: 
+  model: Phi-3-mini-4k-instruct-q4.gguf
   lora: 
   contextSize: 512
   batchSize: 512
-  SelectedModel: 0
+  SelectedModel: 3
   modelProgress: 1
   modelCopyProgress: 1
+  modelHide: 1
 --- !u!1 &1051131186
 GameObject:
   m_ObjectHideFlags: 0
