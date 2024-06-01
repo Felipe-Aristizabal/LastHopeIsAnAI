@@ -370,7 +370,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbb73957005352c47b4094d18062cee4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IAdolfResponse: {fileID: 1847101602}
   llm: {fileID: 1003189847}
 --- !u!114 &1003189847
 MonoBehaviour:
@@ -530,7 +529,7 @@ GameObject:
   - component: {fileID: 1322328827}
   - component: {fileID: 1322328831}
   m_Layer: 0
-  m_Name: Boss
+  m_Name: IAdolf
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -678,10 +677,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bossChat: {fileID: 1003189846}
-  currentPromp:
-  - Ha llegado el jugador, haz una bienvenida corta llamativa y algo grosera, y preguntale
+  currentPrompt:
+  - Ha llegado Anai, haz una bienvenida corta llamativa y algo grosera, y preguntale
     si se quiere unir al lado del mal
-  bossPhase: 1
+  IAdolfResponse: {fileID: 1847101602}
+  bossPhase: 0
 --- !u!1 &1769176118
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,11 +9,8 @@ namespace LLMUnitySamples
 {
     public class BossChat : MonoBehaviour
     {
-
-        [SerializeField] private Text IAdolfResponse;
-
         public LLMClient llm;
-        private bool warmUpDone = false;
+        public bool warmUpDone = false;
         private string lastResponse;
 
 
@@ -23,20 +20,21 @@ namespace LLMUnitySamples
             _ = llm.Warmup(WarmUpCallback);
         }
 
-        public async void SendMessage(string message)
+        public async Task<string> SendMessage(string message)
         {
             if (warmUpDone)
             {
                 var response = await llm.Chat(message);
                 lastResponse = response;
-                // Debug.Log("Player: " + message);
-                Debug.Log("lastResponse: " + lastResponse);
+                Debug.Log("Player: " + message);
                 Debug.Log("Current: " + response);
-                IAdolfResponse.text = response;
+
+                return lastResponse;
             }
             else
             {
                 Debug.LogWarning("LLM is not warmed up yet.");
+                return "A mouse ate my speaker";
             }
         }
 
