@@ -22,7 +22,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5972274788973988572
 Transform:
   m_ObjectHideFlags: 0
@@ -79,7 +79,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: f9d2db777143cc341a5eb45c0c5b2b8b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9b43a96ee42714a4487b67a57270a417, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -87,7 +87,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!95 &8911182884859757085
@@ -206,7 +206,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 10, y: 1}
+  m_Size: {x: 6, y: 1}
   m_Direction: 0
 --- !u!114 &6166880683487456785
 MonoBehaviour:
@@ -222,7 +222,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 2
   randomMoveInterval: 2
-  explosionDistance: 1
+  explosionDistance: 2
   explosionPrefab: {fileID: 0}
 --- !u!114 &6774213761058577429
 MonoBehaviour:
