@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
 
     public static event Action OnPlayerDeath;
     private PlayerPowerUps playerPowerUps;
+    private bool isTakingDamage = false;
 
     private void Awake()
     {
@@ -99,13 +100,14 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D other)
     {
-        Debug.Log(other);
         switch (other.transform.tag)
         {
             case "Laser":
-                Debug.Log("Im in Laser");
                 Destroy(other.gameObject);
                 TakeDamage(20);
+                break;
+            case "Enemy":
+                TakeDamage(5);
                 break;
             default:
                 TakeDamage(0);
@@ -122,12 +124,16 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            StartCoroutine(TakingDamageAnimation());
+            if (!isTakingDamage) 
+            {
+                StartCoroutine(TakingDamageAnimation());
+            }
         }
     }
 
     private IEnumerator TakingDamageAnimation()
     {
+        isTakingDamage = true;
         Vector3 originalScale = transform.localScale;
         Color originalColor = mySpriteRenderer.color;
 
@@ -138,6 +144,7 @@ public class PlayerController : MonoBehaviour
 
         transform.localScale = originalScale;
         mySpriteRenderer.color = originalColor;
+        isTakingDamage = false;
     }
 
     private void Die()

@@ -13,13 +13,25 @@ public class DronController : MonoBehaviour
     private float nextShotTime;
     private GameObject fireLaserParent;
     private SpriteRenderer spriteRenderer;
+    private Rigidbody2D rb2D;
     private Vector3 randomDirection;
     private float nextMoveChangeTime;
     private bool isChasingPlayer = false;
+    private bool isPlayerAlive = true;
 
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+        rb2D = GetComponent<Rigidbody2D>();
+
+        if (rb2D == null)
+        {
+            Debug.LogError("Rigidbody2D is missing on the drone!");
+            return;
+        }
+
+        rb2D.isKinematic = true; 
+
         nextShotTime = Time.time + shootingInterval;
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         fireLaserParent = GameObject.Find("LasersParent");
@@ -28,19 +40,23 @@ public class DronController : MonoBehaviour
         nextMoveChangeTime = Time.time + randomMoveInterval;
 
         AssignDronName();
+        PlayerController.OnPlayerDeath += StopAttacking;
     }
 
     void FixedUpdate()
     {
+        if (isPlayerAlive)
+        { 
+            HandleShooting();
+        }
+
         if (Vector3.Distance(transform.position, player.position) < maxMagnitudeToRunAway)
         {
             MoveAwayFromPlayer();
-            HandleShooting();
         }
         else if (isChasingPlayer)
         {
             MoveTowardsPlayer();
-            HandleShooting();
         }
         else
         {
@@ -99,10 +115,13 @@ public class DronController : MonoBehaviour
 
     void HandleShooting()
     {
-        if (Time.time > nextShotTime)
+        if (player != null)
         {
-            ShootLaser();
-            nextShotTime = Time.time + shootingInterval;
+            if (Time.time > nextShotTime)
+            {
+                ShootLaser();
+                nextShotTime = Time.time + shootingInterval;
+            }
         }
     }
 
@@ -137,5 +156,10 @@ public class DronController : MonoBehaviour
         {
             isChasingPlayer = false;
         }
+    }
+
+    private void StopAttacking()
+    {
+        isPlayerAlive = false;
     }
 }

@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
     public static GameController Instance { get; private set;}
+    private GameObject gameOverUI;
 
     void Awake()
     {
@@ -23,7 +25,13 @@ public class GameController : MonoBehaviour
     private void HandlePlayerDeath()
     {
         // Show the restart UI
-        // restartUI.SetActive(true);
+        gameOverUI = GameObject.Find("CanvasUI").transform.GetChild(0).gameObject;
+        gameOverUI.SetActive(true);
+        Button buttonRestartGame = gameOverUI.GetComponentInChildren<Button>();
+
+        buttonRestartGame.onClick.AddListener(() => {
+            RestartGame();
+        });
     }
 
     private void OnEnable()
@@ -39,6 +47,6 @@ public class GameController : MonoBehaviour
     public void RestartGame()
     {
         // Implement game restart logic, e.g., reload the scene
-        // UnityEngine.SceneManagement.SceneManager.LoadScene("YourSceneName");
+        UnityEngine.SceneManagement.SceneManager.LoadScene("CoreScene");
     }
 }
