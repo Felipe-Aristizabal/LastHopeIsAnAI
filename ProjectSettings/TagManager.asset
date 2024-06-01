@@ -6,11 +6,12 @@ TagManager:
   tags:
   - LaserParent
   - Laser
+  - DronParent
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Throwable objects
   - Water
   - UI
   - 
