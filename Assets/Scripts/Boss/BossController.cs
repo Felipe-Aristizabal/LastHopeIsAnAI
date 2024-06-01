@@ -106,8 +106,11 @@ public class BossController : MonoBehaviour
         if (bossPhase == ActualPhase.Phase1)
         {
             FollowPlayer(moveSpeed, player.transform);
+            if (health <= health * 0.5)
+            {
+                bossPhase = ActualPhase.Phase2;
+            }
         }
-
     }
 
     void ChageCurrentState(ActualPhase phase)
@@ -118,30 +121,29 @@ public class BossController : MonoBehaviour
                 // Debug.Log($"Im in {phase}");
                 break;
             case ActualPhase.Init:
-                // StartCoroutine(TypeText(responses[0]));
-
-                // Debug.Log($"Im in {phase}");
                 SpeeckingWithPlayer(PlayerAnswer);
                 break;
             case ActualPhase.Phase1:
                 TextBg.SetActive(false);
-
+                break;
+            case ActualPhase.Phase2:
                 foreach (LaserRotate laser in laserController)
                 {
                     laser.isPhase1 = true;
                 }
                 break;
-            case ActualPhase.Phase2:
-                Debug.Log($"Im in {phase}");
-                //The boss is Speaking
-                break;
             case ActualPhase.Phase3:
                 Debug.Log($"Im in {phase}");
                 //The boss is Speaking
                 break;
-            case ActualPhase.Dead:
+            case ActualPhase.BadEnding:
                 IAdolfResponse.text = "Oh ya lo esperaba, no eres tan tonto como para dejarte llevar por las emociones";
                 //The boss is Speaking
+                StartCoroutine(HideText(5.0f));
+                break;
+            case ActualPhase.Dead:
+                IAdolfResponse.text = "AAAHHHH SE ME RECALENTO EL PENTIUM";
+                StartCoroutine(HideText(5.0f));
                 break;
         }
     }
@@ -186,15 +188,6 @@ public class BossController : MonoBehaviour
             transform.position += direction * moveSpeed * Time.deltaTime;
         }
     }
-    // private IEnumerator TypeText(string text)
-    // {
-    //     IAdolfResponse.text = "";
-    //     foreach (char letter in text.ToCharArray())
-    //     {
-    //         IAdolfResponse.text += letter;
-    //         yield return new WaitForSeconds(0.5f);
-    //     }
-    // }
 
     public void DecisionPlayer(int answ)
     {
@@ -206,5 +199,22 @@ public class BossController : MonoBehaviour
     {
         yield return new WaitForSeconds(2);
         PlayerIsHere = value;
+    }
+
+    IEnumerator HideText(float value)
+    {
+        TextBg.SetActive(true);
+        yield return new WaitForSeconds(value);
+        TextBg.SetActive(false);
+    }
+
+    public void RecivesDamage(float damage)
+    {
+        health -= damage;
+    }
+
+    public void Die()
+    {
+        Destroy(gameObject);
     }
 }
