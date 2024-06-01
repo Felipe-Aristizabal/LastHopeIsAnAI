@@ -15,6 +15,7 @@ public class BossController : MonoBehaviour
     [Header("Chat Bot")]
     [SerializeField] private BossChat bossChat;
     [SerializeField] private List<string> currentPrompt = new List<string>();
+    [SerializeField] private GameObject TextBg;
     [SerializeField] private Text IAdolfResponse;
     private bool isComplete = false;
 
@@ -22,6 +23,7 @@ public class BossController : MonoBehaviour
     [SerializeField] private int countAnswer = 0;
     [SerializeField] private int playerAnswer;
     [SerializeField] private bool playerIsHere;
+    [SerializeField] private List<LaserRotate> laserController = new List<LaserRotate>();
 
     private List<string> responses = new List<string>();
     private Rigidbody2D rigidbody2D;
@@ -35,7 +37,13 @@ public class BossController : MonoBehaviour
         set { playerAnswer = value; }
     }
 
-    private enum ActualPhase
+    public bool PlayerIsHere
+    {
+        get { return playerIsHere; }
+        set { playerIsHere = value; }
+    }
+
+    public enum ActualPhase
     {
         Idle = 0,
         Init = 1,
@@ -46,7 +54,7 @@ public class BossController : MonoBehaviour
         Dead = 6
     };
 
-    [SerializeField] private ActualPhase bossPhase;
+    public ActualPhase bossPhase;
 
 
     void Start()
@@ -56,6 +64,7 @@ public class BossController : MonoBehaviour
         if (GameObject.FindWithTag("Player"))
         {
             player = GameObject.FindWithTag("Player");
+            StartCoroutine(ChangePlayerHere(GameObject.FindWithTag("Player")));
         }
         PlayerAnswer = 2;
 
@@ -83,9 +92,9 @@ public class BossController : MonoBehaviour
         if (bossChat.warmUpDone && !dialogueGenerated)
         {
             GenerateBossDialogue();
-            dialogueGenerated = true; // Asegura que solo se llama una vez
+            dialogueGenerated = true;
         }
-        if (playerIsHere)
+        if (playerIsHere && bossChat.warmUpDone)
         {
             if (responses.Count > 0 && player)
             {
@@ -97,8 +106,11 @@ public class BossController : MonoBehaviour
         if (bossPhase == ActualPhase.Phase1)
         {
             FollowPlayer(moveSpeed, player.transform);
+            if (health <= health * 0.5)
+            {
+                bossPhase = ActualPhase.Phase2;
+            }
         }
-
     }
 
     void ChageCurrentState(ActualPhase phase)
@@ -109,25 +121,29 @@ public class BossController : MonoBehaviour
                 // Debug.Log($"Im in {phase}");
                 break;
             case ActualPhase.Init:
-                // StartCoroutine(TypeText(responses[0]));
-
-                // Debug.Log($"Im in {phase}");
                 SpeeckingWithPlayer(PlayerAnswer);
                 break;
             case ActualPhase.Phase1:
-
+                TextBg.SetActive(false);
                 break;
             case ActualPhase.Phase2:
-                Debug.Log($"Im in {phase}");
-                //The boss is Speaking
+                foreach (LaserRotate laser in laserController)
+                {
+                    laser.isPhase1 = true;
+                }
                 break;
             case ActualPhase.Phase3:
                 Debug.Log($"Im in {phase}");
                 //The boss is Speaking
                 break;
-            case ActualPhase.Dead:
+            case ActualPhase.BadEnding:
                 IAdolfResponse.text = "Oh ya lo esperaba, no eres tan tonto como para dejarte llevar por las emociones";
                 //The boss is Speaking
+                StartCoroutine(HideText(5.0f));
+                break;
+            case ActualPhase.Dead:
+                IAdolfResponse.text = "AAAHHHH SE ME RECALENTO EL PENTIUM";
+                StartCoroutine(HideText(5.0f));
                 break;
         }
     }
@@ -159,7 +175,7 @@ public class BossController : MonoBehaviour
         }
         else if (response == 2)
         {
-            // Aquí podrías manejar cualquier otra lógica que desees para el caso de response == 2
+            IAdolfResponse.text = responses[countAnswer];
         }
     }
 
@@ -172,19 +188,33 @@ public class BossController : MonoBehaviour
             transform.position += direction * moveSpeed * Time.deltaTime;
         }
     }
-    // private IEnumerator TypeText(string text)
-    // {
-    //     IAdolfResponse.text = "";
-    //     foreach (char letter in text.ToCharArray())
-    //     {
-    //         IAdolfResponse.text += letter;
-    //         yield return new WaitForSeconds(0.5f);
-    //     }
-    // }
 
     public void DecisionPlayer(int answ)
     {
         PlayerAnswer = answ;
         SpeeckingWithPlayer(answ);
+    }
+
+    IEnumerator ChangePlayerHere(bool value)
+    {
+        yield return new WaitForSeconds(2);
+        PlayerIsHere = value;
+    }
+
+    IEnumerator HideText(float value)
+    {
+        TextBg.SetActive(true);
+        yield return new WaitForSeconds(value);
+        TextBg.SetActive(false);
+    }
+
+    public void RecivesDamage(float damage)
+    {
+        health -= damage;
+    }
+
+    public void Die()
+    {
+        Destroy(gameObject);
     }
 }

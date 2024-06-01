@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 public class PlayerController : MonoBehaviour
 {
@@ -40,15 +41,15 @@ public class PlayerController : MonoBehaviour
         myAnimator = GetComponent<Animator>();
         mySpriteRenderer = GetComponent<SpriteRenderer>();
 
-        if (rb2D == null) Debug.LogError("Rigidbody2D is missing!");
-        if (myAnimator == null) Debug.LogError("Animator is missing!");
-        if (mySpriteRenderer == null) Debug.LogError("SpriteRenderer is missing!");
+        if (rb2D == null) UnityEngine.Debug.LogError("Rigidbody2D is missing!");
+        if (myAnimator == null) UnityEngine.Debug.LogError("Animator is missing!");
+        if (mySpriteRenderer == null) UnityEngine.Debug.LogError("SpriteRenderer is missing!");
     }
 
     private void Start()
     {
         playerPowerUps = GetComponent<PlayerPowerUps>();
-        if (playerPowerUps == null) Debug.LogError("PlayerPowerUps component is missing!");
+        if (playerPowerUps == null) UnityEngine.Debug.LogError("PlayerPowerUps component is missing!");
 
         if (playerPowerUps != null && playerPowerUps.powerUp != null)
         {
@@ -57,7 +58,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            Debug.LogError("PlayerPowerUps component or PowerUp instance is missing!");
+            UnityEngine.Debug.LogError("PlayerPowerUps component or PowerUp instance is missing!");
         }
 
         InitializeProjectilePool();
@@ -116,23 +117,23 @@ public class PlayerController : MonoBehaviour
     {
         if (Time.time < meleeAttackCooldown)
         {
-            return; 
+            return;
         }
 
         if (currentAttackMode == AttackMode.Melee)
         {
             myAnimator.SetBool("IsMeleeAttacking", true);
             isMeleeAttacking = true;
-            isInvulnerable = true; 
+            isInvulnerable = true;
             StartCoroutine(ActivateMeleeCollider());
             meleeAttackCooldown = Time.time + playerPowerUps.powerUp.FireRate;
-            Debug.Log("Performing melee attack");
+            UnityEngine.Debug.Log("Performing melee attack");
         }
         else if (currentAttackMode == AttackMode.Ranged)
         {
             myAnimator.SetBool("IsRangeAttacking", true);
             PerformRangedAttack();
-            Debug.Log("Performing ranged attack");
+            UnityEngine.Debug.Log("Performing ranged attack");
         }
     }
 
@@ -144,17 +145,17 @@ public class PlayerController : MonoBehaviour
         if (meleeCollider != null)
         {
             meleeCollider.enabled = true;
-            meleeCollider.isTrigger = true; 
+            meleeCollider.isTrigger = true;
             meleeCollider.GetComponent<MeleeCollider>().Initialize(this);
 
-            yield return new WaitForSeconds(0.4f); 
+            yield return new WaitForSeconds(0.4f);
             meleeCollider.enabled = false;
-            isInvulnerable = false; 
+            isInvulnerable = false;
             myAnimator.SetBool("IsMeleeAttacking", false);
         }
         else
         {
-            Debug.LogError("Melee collider not found on fire point");
+            UnityEngine.Debug.LogError("Melee collider not found on fire point");
         }
     }
 
@@ -181,7 +182,7 @@ public class PlayerController : MonoBehaviour
             Vector2 direction = (mousePosition - selectedFirePoint.position).normalized;
 
             rangedAttack.transform.position = selectedFirePoint.position;
-            rangedAttack.transform.rotation = Quaternion.identity;  
+            rangedAttack.transform.rotation = Quaternion.identity;
 
             ProjectilePlayer projectileScript = rangedAttack.GetComponent<ProjectilePlayer>();
             if (projectileScript != null)
@@ -217,7 +218,7 @@ public class PlayerController : MonoBehaviour
             yield return null;
         }
         projectileRenderer.color = originalColor;
-        
+
         ProjectilePlayer projectileScript = projectile.GetComponent<ProjectilePlayer>();
         if (projectileScript != null)
         {
@@ -230,7 +231,7 @@ public class PlayerController : MonoBehaviour
         poolParent = GameObject.FindGameObjectWithTag("PlayerRangedPool");
         if (poolParent == null)
         {
-            Debug.LogError("PlayerRangedPool not found in the scene!");
+            UnityEngine.Debug.LogError("PlayerRangedPool not found in the scene!");
             return;
         }
 
@@ -298,8 +299,15 @@ public class PlayerController : MonoBehaviour
                 other.transform.GetComponent<DronLaserController>().DeactivateLaser();
                 TakeDamage(20);
                 break;
+            case "LaserBoss":
+                other.transform.GetComponent<LaserBulletBoss>().DeactivateLaser();
+                TakeDamage(20);
+                break;
             case "Enemy":
                 TakeDamage(5);
+                break;
+            case "Boss":
+                TakeDamage(30);
                 break;
             default:
                 TakeDamage(0);

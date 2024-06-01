@@ -13,6 +13,8 @@ public class LaserRotate : MonoBehaviour
     [SerializeField] private LaserType type;
     [SerializeField] private float healt = 10;
 
+    [SerializeField] private BossController bossController;
+
     [Header("Laser Type 1")]
     [SerializeField] private float speed;
     [SerializeField] private GameObject laserPrefab;
@@ -24,6 +26,7 @@ public class LaserRotate : MonoBehaviour
     [SerializeField] private float cooldownScale;
     [SerializeField] private float minAngle;
     [SerializeField] private float maxAngle;
+    public bool isPhase1;
 
     private float nextShotTime;
 
@@ -61,21 +64,25 @@ public class LaserRotate : MonoBehaviour
     }
     void FixedUpdate()
     {
-        if (type == LaserType.Laser1)
+        if (isPhase1)
         {
-            AimPlayerLaser();
-            HandleShooting();
-        }
-        else
-        {
-            StartCoroutine(RotateWithCooldown(cooldownRotation, minAngle, maxAngle));
-            StartCoroutine(ScaleWithCooldown(cooldownScale, trailLaserTransform));
+            if (type == LaserType.Laser1)
+            {
+                AimPlayerLaser();
+                HandleShooting();
+            }
+            else
+            {
+                StartCoroutine(RotateWithCooldown(cooldownRotation, minAngle, maxAngle));
+                StartCoroutine(ScaleWithCooldown(cooldownScale, trailLaserTransform));
+            }
+
+            if (healt <= 0)
+            {
+                Destroy(this.gameObject);
+            }
         }
 
-        if (healt <= 0)
-        {
-            Destroy(this.gameObject);
-        }
     }
 
     void OnTriggerEnter2D(Collider2D other)
