@@ -55,7 +55,7 @@ public class GameController : MonoBehaviour
     void Start()
     {
         // Assign the PowerUps if the Player can update
-        AssignRandomPowerUps();
+        // AssignRandomPowerUps();
     }
 
     private void HandlePlayerDeath()

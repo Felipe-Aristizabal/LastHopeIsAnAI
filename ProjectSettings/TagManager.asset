@@ -9,6 +9,8 @@ TagManager:
   - DronParent
   - Enemy
   - AnimationPowerUp
+  - PlayerRangedPool
+  - MeleeCollider
   layers:
   - Default
   - TransparentFX
@@ -16,8 +18,8 @@ TagManager:
   - Throwable objects
   - Water
   - UI
-  - 
-  - 
+  - PlayerProjectiles
+  - Player
   - 
   - 
   - 
