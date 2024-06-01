@@ -8,6 +8,7 @@ TagManager:
   - Laser
   - DronParent
   - Enemy
+  - AnimationPowerUp
   layers:
   - Default
   - TransparentFX
