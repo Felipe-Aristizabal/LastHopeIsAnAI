@@ -103,7 +103,7 @@ public class PlayerController : MonoBehaviour
         switch (other.transform.tag)
         {
             case "Laser":
-                Destroy(other.gameObject);
+                other.transform.GetComponent<DronLaserController>().DeactivateLaser();
                 TakeDamage(20);
                 break;
             case "Enemy":

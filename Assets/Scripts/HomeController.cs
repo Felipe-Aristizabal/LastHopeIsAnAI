@@ -34,10 +34,16 @@ public class HomeController : MonoBehaviour
         });
     }
 
-
     private void StartGame()
     {
-        SceneManager.LoadScene("CoreScene");
+        if (PlayerPrefs.GetInt("IsCompletedTutorial", 0) == 1)
+        {
+            SceneManager.LoadScene("Level1");
+        }
+        else
+        {
+            SceneManager.LoadScene("Tutorial");
+        }
     }
 
     private void ExitGame()

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class DronController : MonoBehaviour
@@ -18,6 +19,7 @@ public class DronController : MonoBehaviour
     private float nextMoveChangeTime;
     private bool isChasingPlayer = false;
     private bool isPlayerAlive = true;
+    private List<GameObject> laserPool;
 
     void Start()
     {
@@ -41,6 +43,8 @@ public class DronController : MonoBehaviour
 
         AssignDronName();
         PlayerController.OnPlayerDeath += StopAttacking;
+
+        CreateLaserPool();
     }
 
     void FixedUpdate()
@@ -80,6 +84,20 @@ public class DronController : MonoBehaviour
         }
     }
 
+    private void CreateLaserPool()
+    {
+        GameObject dronLaserParent = new GameObject(gameObject.name);
+        dronLaserParent.transform.parent = fireLaserParent.transform;
+
+        laserPool = new List<GameObject>();
+        for (int i = 0; i < 5; i++)
+        {
+            GameObject laser = Instantiate(laserPrefab, dronLaserParent.transform);
+            laser.SetActive(false);
+            laserPool.Add(laser);
+        }
+    }
+
     void MoveTowardsPlayer()
     {
         Vector3 direction = player.position - transform.position;
@@ -115,7 +133,7 @@ public class DronController : MonoBehaviour
 
     void HandleShooting()
     {
-        if (player != null)
+        if (isChasingPlayer && player != null)
         {
             if (Time.time > nextShotTime)
             {
@@ -127,7 +145,25 @@ public class DronController : MonoBehaviour
 
     void ShootLaser()
     {
-        Instantiate(laserPrefab, firePoint.position, firePoint.rotation, fireLaserParent.transform);
+        GameObject laser = GetPooledLaser();
+        if (laser != null)
+        {
+            laser.transform.position = firePoint.position;
+            laser.transform.rotation = firePoint.rotation;
+            laser.SetActive(true);
+        }
+    }
+
+    GameObject GetPooledLaser()
+    {
+        foreach (GameObject laser in laserPool)
+        {
+            if (!laser.activeInHierarchy)
+            {
+                return laser;
+            }
+        }
+        return null;
     }
 
     void FlipSprite()

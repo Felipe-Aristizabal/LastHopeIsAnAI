@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class DronLaserController : MonoBehaviour
 {
-    [SerializeField] float speed;
+    [SerializeField] private float speed;
     private Vector2 direction;
 
-    void Start()
+    void OnEnable()
     {
         Transform playerTransform = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         if (playerTransform != null)
@@ -17,11 +17,11 @@ public class DronLaserController : MonoBehaviour
             Rigidbody2D rb = GetComponent<Rigidbody2D>();
             if (rb != null)
             {
-                rb.AddForce(direction * speed, ForceMode2D.Impulse);
+                rb.velocity = direction * speed;
             }
         }
 
-        Invoke("DestroyLaser", 3f);
+        Invoke("DeactivateLaser", 4f);
     }
 
     void RotateTowardsDirection(Vector2 direction)
@@ -30,13 +30,8 @@ public class DronLaserController : MonoBehaviour
         transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle + 90));
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    public void DeactivateLaser()
     {
-        Destroy(gameObject);
-    }
-
-    void DestroyLaser()
-    {
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 }
