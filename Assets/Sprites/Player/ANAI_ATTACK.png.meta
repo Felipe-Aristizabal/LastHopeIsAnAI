@@ -34,7 +34,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -43,7 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -72,7 +72,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -108,7 +108,91 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: ANAI_ATTACK_0
+      rect:
+        serializedVersion: 2
+        x: 941
+        y: 399
+        width: 949
+        height: 1588
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e6137d83577ccfc4f9f3dbfa0013f733
+      internalID: 71495608
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ANAI_ATTACK_1
+      rect:
+        serializedVersion: 2
+        x: 2384
+        y: 399
+        width: 1123
+        height: 1588
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fe47ef17ea60eb0429c390ae57463504
+      internalID: -289849974
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ANAI_ATTACK_2
+      rect:
+        serializedVersion: 2
+        x: 3822
+        y: 399
+        width: 1128
+        height: 1588
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 00a84445b0d9b4445a9720975ce4c2f9
+      internalID: -582447513
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ANAI_ATTACK_6
+      rect:
+        serializedVersion: 2
+        x: 5724
+        y: 399
+        width: 1124
+        height: 1588
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0ee6465b675795140a55139789340a3a
+      internalID: 599461438
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -119,7 +203,16 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      ANAI_ATTACK_0: 71495608
+      ANAI_ATTACK_1: -289849974
+      ANAI_ATTACK_2: -582447513
+      ANAI_ATTACK_3: 280564033
+      ANAI_ATTACK_4: -1339125767
+      ANAI_ATTACK_5: -1507443981
+      ANAI_ATTACK_6: 599461438
+      ANAI_ATTACK_7: 1824498662
+      ANAI_ATTACK_8: 1573163732
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

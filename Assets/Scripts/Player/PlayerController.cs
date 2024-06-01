@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour
 {
@@ -11,20 +12,26 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb2D;
     private Animator myAnimator;
     private SpriteRenderer mySpriteRenderer;
+    private float meleeAttackCooldown = 0f;
+    private bool isMeleeAttacking = false;
+    private bool isInvulnerable = false;
 
     public static event Action OnPlayerDeath;
     private PlayerPowerUps playerPowerUps;
     private bool isTakingDamage = false;
 
-
     private enum AttackMode { Melee, Ranged }
     private AttackMode currentAttackMode = AttackMode.Melee;
 
-    [SerializeField] private Sprite meleeSprite;
-    [SerializeField] private Sprite rangedSprite;
     [SerializeField] private GameObject rangedAttackPrefab;
-    [SerializeField] private Transform firePoint;
+    [SerializeField] private Transform firePointLeft;
+    [SerializeField] private Transform firePointRight;
+    [SerializeField] private BoxCollider2D meleeColliderLeft;
+    [SerializeField] private BoxCollider2D meleeColliderRight;
 
+    private List<GameObject> projectilePool;
+    private GameObject poolParent;
+    private float nextFireTime = 0f;
 
     private void Awake()
     {
@@ -52,6 +59,11 @@ public class PlayerController : MonoBehaviour
         {
             Debug.LogError("PlayerPowerUps component or PowerUp instance is missing!");
         }
+
+        InitializeProjectilePool();
+
+        meleeColliderLeft.enabled = false;
+        meleeColliderRight.enabled = false;
     }
 
     private void OnEnable()
@@ -93,35 +105,154 @@ public class PlayerController : MonoBehaviour
         if (currentAttackMode == AttackMode.Melee)
         {
             currentAttackMode = AttackMode.Ranged;
-            mySpriteRenderer.sprite = rangedSprite;
         }
         else
         {
             currentAttackMode = AttackMode.Melee;
-            mySpriteRenderer.sprite = meleeSprite;
         }
     }
 
     private void Attack()
     {
+        if (Time.time < meleeAttackCooldown)
+        {
+            return; 
+        }
+
         if (currentAttackMode == AttackMode.Melee)
         {
-            // Implement melee attack logic
+            myAnimator.SetBool("IsMeleeAttacking", true);
+            isMeleeAttacking = true;
+            isInvulnerable = true; 
+            StartCoroutine(ActivateMeleeCollider());
+            meleeAttackCooldown = Time.time + playerPowerUps.powerUp.FireRate;
             Debug.Log("Performing melee attack");
-            myAnimator.SetTrigger("MeleeAttack");
         }
         else if (currentAttackMode == AttackMode.Ranged)
         {
-            // Implement ranged attack logic
-            Debug.Log("Performing ranged attack");
+            myAnimator.SetBool("IsRangeAttacking", true);
             PerformRangedAttack();
+            Debug.Log("Performing ranged attack");
+        }
+    }
+
+    private IEnumerator ActivateMeleeCollider()
+    {
+        Transform selectedFirePoint = mySpriteRenderer.flipX ? firePointRight : firePointLeft;
+        BoxCollider2D meleeCollider = selectedFirePoint.GetComponent<BoxCollider2D>();
+
+        if (meleeCollider != null)
+        {
+            meleeCollider.enabled = true;
+            meleeCollider.isTrigger = true; 
+            meleeCollider.GetComponent<MeleeCollider>().Initialize(this);
+
+            yield return new WaitForSeconds(0.4f); 
+            meleeCollider.enabled = false;
+            isInvulnerable = false; 
+            myAnimator.SetBool("IsMeleeAttacking", false);
+        }
+        else
+        {
+            Debug.LogError("Melee collider not found on fire point");
+        }
+    }
+
+    public void OnMeleeAttackTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Enemy"))
+        {
+            EnemyController enemyController = other.GetComponent<EnemyController>();
+            if (enemyController != null)
+            {
+                enemyController.TakeDamage(playerPowerUps.powerUp.FireDamage);
+            }
         }
     }
 
     private void PerformRangedAttack()
     {
-        GameObject rangedAttack = Instantiate(rangedAttackPrefab, firePoint.position, Quaternion.identity);
-        // Add logic to move the ranged attack or add additional effects
+        Transform selectedFirePoint = mySpriteRenderer.flipX ? firePointRight : firePointLeft;
+        GameObject rangedAttack = GetPooledProjectile();
+        if (rangedAttack != null)
+        {
+            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            mousePosition.z = 0;
+            Vector2 direction = (mousePosition - selectedFirePoint.position).normalized;
+
+            rangedAttack.transform.position = selectedFirePoint.position;
+            rangedAttack.transform.rotation = Quaternion.identity;  
+
+            ProjectilePlayer projectileScript = rangedAttack.GetComponent<ProjectilePlayer>();
+            if (projectileScript != null)
+            {
+                projectileScript.SetDamage(playerPowerUps.powerUp.FireDamage);
+                projectileScript.SetFireRange(playerPowerUps.powerUp.FireRange);
+            }
+
+            rangedAttack.SetActive(true);
+            StartCoroutine(AnimateProjectile(rangedAttack, direction, mySpriteRenderer.flipX));
+        }
+    }
+
+    private IEnumerator AnimateProjectile(GameObject projectile, Vector2 direction, bool isFlipped)
+    {
+        SpriteRenderer projectileRenderer = projectile.GetComponent<SpriteRenderer>();
+        Color originalColor = projectileRenderer.color;
+        Color transparentColor = new Color(originalColor.r, originalColor.g, originalColor.b, 0);
+
+        projectile.transform.localScale = Vector3.one * 0.01f;
+        projectileRenderer.color = transparentColor;
+
+        float duration = 0.2f;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < duration)
+        {
+            float t = elapsedTime / duration;
+            projectile.transform.localScale = Vector3.Lerp(Vector3.one * 0.01f, new Vector3(0.5f, 0.5f, 0.5f), t);
+            projectileRenderer.color = Color.Lerp(transparentColor, originalColor, t);
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        projectileRenderer.color = originalColor;
+        
+        ProjectilePlayer projectileScript = projectile.GetComponent<ProjectilePlayer>();
+        if (projectileScript != null)
+        {
+            projectileScript.SetDirection(direction, isFlipped);
+        }
+    }
+
+    private void InitializeProjectilePool()
+    {
+        poolParent = GameObject.FindGameObjectWithTag("PlayerRangedPool");
+        if (poolParent == null)
+        {
+            Debug.LogError("PlayerRangedPool not found in the scene!");
+            return;
+        }
+
+        projectilePool = new List<GameObject>();
+        for (int i = 0; i < 10; i++)
+        {
+            GameObject projectile = Instantiate(rangedAttackPrefab, poolParent.transform);
+            projectile.SetActive(false);
+            projectilePool.Add(projectile);
+        }
+    }
+
+    private GameObject GetPooledProjectile()
+    {
+        foreach (GameObject projectile in projectilePool)
+        {
+            if (!projectile.activeInHierarchy)
+            {
+                return projectile;
+            }
+        }
+        return null;
     }
 
     private void Move()
@@ -156,6 +287,11 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D other)
     {
+        if (other.gameObject.CompareTag("MeleeCollider"))
+        {
+            return;
+        }
+
         switch (other.transform.tag)
         {
             case "Laser":
@@ -173,6 +309,11 @@ public class PlayerController : MonoBehaviour
 
     private void TakeDamage(int damage)
     {
+        if (isInvulnerable)
+        {
+            return;
+        }
+
         health -= damage;
         if (health <= 0)
         {
@@ -180,7 +321,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            if (!isTakingDamage) 
+            if (!isTakingDamage)
             {
                 StartCoroutine(TakingDamageAnimation());
             }
@@ -201,6 +342,16 @@ public class PlayerController : MonoBehaviour
         transform.localScale = originalScale;
         mySpriteRenderer.color = originalColor;
         isTakingDamage = false;
+    }
+
+    public void ResetMeleeAttack()
+    {
+        myAnimator.SetBool("IsMeleeAttacking", false);
+    }
+
+    public void ResetRangeAttack()
+    {
+        myAnimator.SetBool("IsRangeAttacking", false);
     }
 
     private void Die()

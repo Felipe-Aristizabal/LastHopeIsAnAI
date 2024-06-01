@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: ad2e5b574082d594191dbbec29e656d3
+guid: 91292bad849b7e647b561051b29c2334
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -110,13 +110,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ANAI_MELEE_0
+      name: TextSquare_0
       rect:
         serializedVersion: 2
-        x: 755
-        y: 315
-        width: 946
-        height: 1588
+        x: 2
+        y: 10
+        width: 36
+        height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -124,71 +124,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d252b9a213ee92c41863f695561d1d14
-      internalID: -1796571744
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ANAI_MELEE_1
-      rect:
-        serializedVersion: 2
-        x: 2193
-        y: 315
-        width: 1127
-        height: 1588
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9de6e39fa9f649145b6e4d8db868a974
-      internalID: 460287717
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ANAI_MELEE_2
-      rect:
-        serializedVersion: 2
-        x: 3635
-        y: 315
-        width: 1524
-        height: 1588
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 097c6e71f55d0844b8405bbde05e33f9
-      internalID: 1731754278
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ANAI_MELEE_3
-      rect:
-        serializedVersion: 2
-        x: 5534
-        y: 315
-        width: 1127
-        height: 1588
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e127df4971d85ac41a831daf60a82fda
-      internalID: 446177098
+      spriteID: 6e55e642b9fb85442b10ba129afb08c7
+      internalID: 1277305742
       vertices: []
       indices: 
       edges: []
@@ -204,10 +141,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      ANAI_MELEE_0: -1796571744
-      ANAI_MELEE_1: 460287717
-      ANAI_MELEE_2: 1731754278
-      ANAI_MELEE_3: 446177098
+      TextSquare_0: 1277305742
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

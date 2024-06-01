@@ -15,13 +15,14 @@ GameObject:
   - component: {fileID: 8464233760741720792}
   - component: {fileID: 3343547500815361356}
   - component: {fileID: 8175392416502120226}
+  - component: {fileID: 1915198053962923495}
   m_Layer: 0
   m_Name: Dron
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1871577077278723325
 Transform:
   m_ObjectHideFlags: 0
@@ -172,7 +173,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 1
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!70 &3343547500815361356
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -215,7 +216,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5342186717812775953}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8baec66fa4b0178409279e16e1d6b26d, type: 3}
   m_Name: 
@@ -226,6 +227,19 @@ MonoBehaviour:
   maxMagnitudeToRunAway: 5
   laserPrefab: {fileID: 3717198647275912954, guid: 9ddfeabe7360b2448903812eeb6dfdb4, type: 3}
   firePoint: {fileID: 9222916107643023207}
+--- !u!114 &1915198053962923495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5342186717812775953}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f90a2c0c06bb26946a49cf532a18fd27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 10
 --- !u!1 &7975743499720836136
 GameObject:
   m_ObjectHideFlags: 0
