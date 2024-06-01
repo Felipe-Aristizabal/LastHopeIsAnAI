@@ -54,7 +54,7 @@ namespace LLMUnitySamples
             _ = llm.Warmup(WarmUpCallback);
         }
 
-        void onInputFieldSubmit(string newText)
+        public void onInputFieldSubmit(string newText)
         {
             inputBubble.ActivateInputField();
             if (blockInput || newText.Trim() == "" || Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
