@@ -18,6 +18,7 @@ TagManager:
   - MicroParent
   - SpawnpointEnemy
   - HUD
+  - ExternalBounds
   layers:
   - Default
   - TransparentFX
