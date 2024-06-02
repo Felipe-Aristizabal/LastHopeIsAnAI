@@ -45,6 +45,7 @@ public class LaserRotate : MonoBehaviour
         if (GameObject.FindWithTag("Player"))
         {
             playerTransform = GameObject.FindWithTag("Player").GetComponent<Transform>();
+            bossController = GameObject.FindWithTag("Boss").GetComponent<BossController>();
         }
         fireLaserParent = GameObject.Find("LaserParent");
 
@@ -76,6 +77,7 @@ public class LaserRotate : MonoBehaviour
 
         if (healt <= 0)
         {
+            bossController.DestroyTurret();
             Destroy(this.gameObject);
         }
 
@@ -183,15 +185,15 @@ public class LaserRotate : MonoBehaviour
 
 
     // *------------------LASER TYEPE 1 LOGIG------------------------*
-    void AimPlayerLaser()
-    {
-        if (playerTransform != null)
-        {
-            Vector2 playerPosition = playerTransform.position;
-            direction = (playerPosition - (Vector2)transform.position).normalized;
-            RotateTowardsDirection(direction);
-        }
-    }
+    // void AimPlayerLaser()
+    // {
+    //     if (playerTransform != null)
+    //     {
+    //         Vector2 playerPosition = playerTransform.position;
+    //         direction = (playerPosition - (Vector2)transform.position).normalized;
+    //         RotateTowardsDirection(direction);
+    //     }
+    // }
 
     void RotateTowardsDirection(Vector2 direction)
     {

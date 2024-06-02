@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using LLMUnitySamples;
@@ -16,21 +17,22 @@ public class BossController : MonoBehaviour
 
     [Header("Chat Bot")]
     [SerializeField] private List<string> currentPrompt = new List<string>();
-    [SerializeField] private BossChat bossChat; //!BUSCAR
-    private GameObject TextBg; //!BUSCAR
-    private Text IAdolfResponse; //!BUSCAR
+    [SerializeField] private BossChat bossChat;
+    private GameObject TextBg;
+    private Text IAdolfResponse;
     private bool isComplete = false;
 
     [Header("Phases Values")]
     [SerializeField] private int countAnswer = 0;
     [SerializeField] private int playerAnswer;
     [SerializeField] private bool playerIsHere;
-    private GameObject phase2Parent; //!BUSCAR
+    private Transform phase2Pos;
+    private GameObject phase2Parent;
 
 
     private List<string> responses = new List<string>();
     private Rigidbody2D rigidbody2D;
-    private GameObject player; //!BUSCAR
+    private GameObject player;
     private bool dialogueGenerated = false;
     private GameObject AnaiAnswers;
     private bool isBossScene = false;
@@ -63,6 +65,7 @@ public class BossController : MonoBehaviour
 
     void Start()
     {
+        health = 350;
         rigidbody2D = GetComponent<Rigidbody2D>();
 
         if (GameObject.FindWithTag("Player"))
@@ -110,6 +113,7 @@ public class BossController : MonoBehaviour
                 IAdolfResponse = GameObject.Find("IAdolfResponse").GetComponent<Text>();
                 phase2Parent = GameObject.Find("------PHASE 2-------");
                 AnaiAnswers = GameObject.Find("AnaiAnswers");
+                phase2Pos = GameObject.Find("PosPhase2").transform;
                 StartCoroutine(ChangePlayerHere(GameObject.FindWithTag("Player")));
                 isSearching = false;
             }
@@ -123,10 +127,12 @@ public class BossController : MonoBehaviour
                 }
             }
 
+            Debug.Log($"OUT {health}");
             if (bossPhase == ActualPhase.Phase1)
             {
+                Debug.Log($"IN {health}");
                 FollowPlayer(moveSpeed, player.transform);
-                if (health <= health * 0.5)
+                if (health <= 175)
                 {
                     bossPhase = ActualPhase.Phase2;
                     ChageCurrentState(bossPhase);
@@ -146,12 +152,14 @@ public class BossController : MonoBehaviour
                 SpeeckingWithPlayer(PlayerAnswer);
                 break;
             case ActualPhase.Phase1:
+                AnaiAnswers.SetActive(false);
 
                 break;
             case ActualPhase.Phase2:
                 TextBg.SetActive(true);
                 StartCoroutine(HideText(5));
-                // IAdolfResponse.text =  responses[countAnswer];
+                StartCoroutine(SmoothMoveToPosition(phase2Pos.position, 5f));
+
                 IAdolfResponse.text = "Me unire a la red para obtener mas poder";
                 phase2Parent.SetActive(true);
                 break;
@@ -161,12 +169,26 @@ public class BossController : MonoBehaviour
                 StartCoroutine(HideText(5.0f));
                 break;
             case ActualPhase.Dead:
+                TextBg.SetActive(true);
                 IAdolfResponse.text = "AAAHHHH SE ME RECALENTO EL PENTIUM";
                 StartCoroutine(HideText(5.0f));
                 break;
         }
     }
 
+    IEnumerator SmoothMoveToPosition(Vector3 targetPosition, float duration)
+    {
+        float elapsedTime = 0f;
+        Vector3 startingPosition = transform.position;
+
+        while (elapsedTime < duration)
+        {
+            transform.position = Vector3.Lerp(startingPosition, targetPosition, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        transform.position = targetPosition;
+    }
     void SpeeckingWithPlayer(int response)
     {
         if (response == 0)
@@ -199,7 +221,13 @@ public class BossController : MonoBehaviour
         }
     }
 
-
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            RecivesDamage(10);
+        }
+    }
     void FollowPlayer(float moveSpeed, Transform player)
     {
         if (player != null)
@@ -209,6 +237,10 @@ public class BossController : MonoBehaviour
         }
     }
 
+    public void DestroyTurret()
+    {
+        health -= 40;
+    }
     public void DecisionPlayer(int answ)
     {
         PlayerAnswer = answ;

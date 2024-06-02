@@ -369,7 +369,7 @@ GameObject:
   - component: {fileID: 699303369}
   m_Layer: 3
   m_Name: LasersType1 Right
-  m_TagString: Untagged
+  m_TagString: Turret
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -995,6 +995,37 @@ MonoBehaviour:
   modelProgress: 1
   modelCopyProgress: 1
   modelHide: 1
+--- !u!1 &1146501313
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1146501314}
+  m_Layer: 0
+  m_Name: PosPhase2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1146501314
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1146501313}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 29.92, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1321251138
 GameObject:
   m_ObjectHideFlags: 0
@@ -1215,6 +1246,7 @@ MonoBehaviour:
   countAnswer: 0
   playerAnswer: 0
   playerIsHere: 0
+  phase2Pos: {fileID: 1146501314}
   bossPhase: 0
 --- !u!95 &1322328832
 Animator:
@@ -1430,7 +1462,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1417124632
 Transform:
   m_ObjectHideFlags: 0
@@ -1464,7 +1496,7 @@ GameObject:
   - component: {fileID: 1478821671}
   m_Layer: 3
   m_Name: LasersType1 Left
-  m_TagString: Untagged
+  m_TagString: Turret
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7478,7 +7510,7 @@ GameObject:
   - component: {fileID: 1846983370}
   m_Layer: 3
   m_Name: LasersType2 Left
-  m_TagString: Untagged
+  m_TagString: Turret
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7995,7 +8027,7 @@ GameObject:
   - component: {fileID: 2061677252}
   m_Layer: 3
   m_Name: LasersType2 Right
-  m_TagString: Untagged
+  m_TagString: Turret
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8184,3 +8216,4 @@ SceneRoots:
   - {fileID: 1417124632}
   - {fileID: 250022267}
   - {fileID: 2114020667}
+  - {fileID: 1146501314}
