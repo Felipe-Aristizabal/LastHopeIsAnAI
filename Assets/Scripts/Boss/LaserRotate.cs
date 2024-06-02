@@ -26,7 +26,6 @@ public class LaserRotate : MonoBehaviour
     [SerializeField] private float cooldownScale;
     [SerializeField] private float minAngle;
     [SerializeField] private float maxAngle;
-    public bool isPhase1;
 
     private float nextShotTime;
 
@@ -64,23 +63,20 @@ public class LaserRotate : MonoBehaviour
     }
     void FixedUpdate()
     {
-        if (isPhase1)
+        if (type == LaserType.Laser1)
         {
-            if (type == LaserType.Laser1)
-            {
-                AimPlayerLaser();
-                HandleShooting();
-            }
-            else
-            {
-                StartCoroutine(RotateWithCooldown(cooldownRotation, minAngle, maxAngle));
-                StartCoroutine(ScaleWithCooldown(cooldownScale, trailLaserTransform));
-            }
+            // AimPlayerLaser();
+            HandleShooting();
+        }
+        else
+        {
+            StartCoroutine(RotateWithCooldown(cooldownRotation, minAngle, maxAngle));
+            StartCoroutine(ScaleWithCooldown(cooldownScale, trailLaserTransform));
+        }
 
-            if (healt <= 0)
-            {
-                Destroy(this.gameObject);
-            }
+        if (healt <= 0)
+        {
+            Destroy(this.gameObject);
         }
 
     }

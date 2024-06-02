@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using LLMUnitySamples;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -13,24 +15,26 @@ public class BossController : MonoBehaviour
     [SerializeField] private float meleeDamage;
 
     [Header("Chat Bot")]
-    [SerializeField] private BossChat bossChat;
     [SerializeField] private List<string> currentPrompt = new List<string>();
-    [SerializeField] private GameObject TextBg;
-    [SerializeField] private Text IAdolfResponse;
+    [SerializeField] private BossChat bossChat; //!BUSCAR
+    private GameObject TextBg; //!BUSCAR
+    private Text IAdolfResponse; //!BUSCAR
     private bool isComplete = false;
 
     [Header("Phases Values")]
     [SerializeField] private int countAnswer = 0;
     [SerializeField] private int playerAnswer;
     [SerializeField] private bool playerIsHere;
-    [SerializeField] private GameObject phase2Parent;
-    [SerializeField] private List<LaserRotate> laserController = new List<LaserRotate>();
+    private GameObject phase2Parent; //!BUSCAR
+
 
     private List<string> responses = new List<string>();
     private Rigidbody2D rigidbody2D;
-    private GameObject player;
+    private GameObject player; //!BUSCAR
     private bool dialogueGenerated = false;
-
+    private GameObject AnaiAnswers;
+    private bool isBossScene = false;
+    private bool isSearching = true;
     public int PlayerAnswer
     {
         get { return playerAnswer; }
@@ -64,7 +68,6 @@ public class BossController : MonoBehaviour
         if (GameObject.FindWithTag("Player"))
         {
             player = GameObject.FindWithTag("Player");
-            StartCoroutine(ChangePlayerHere(GameObject.FindWithTag("Player")));
         }
         PlayerAnswer = 2;
 
@@ -85,7 +88,6 @@ public class BossController : MonoBehaviour
                 TextBg.SetActive(true);
             }
         }
-
     }
 
     void FixedUpdate()
@@ -95,22 +97,40 @@ public class BossController : MonoBehaviour
             GenerateBossDialogue();
             dialogueGenerated = true;
         }
-        if (playerIsHere && bossChat.warmUpDone)
-        {
-            if (responses.Count > 0 && player && bossPhase == ActualPhase.Idle)
-            {
-                bossPhase = ActualPhase.Init;
-                ChageCurrentState(bossPhase);
-            }
-        }
 
-        if (bossPhase == ActualPhase.Phase1)
+        if (SceneManager.GetActiveScene().name == "BossScene")
         {
-            FollowPlayer(moveSpeed, player.transform);
-            if (health <= health * 0.5)
+            isBossScene = true;
+        }
+        if (isBossScene)
+        {
+            if (isSearching)
             {
-                bossPhase = ActualPhase.Phase2;
-                ChageCurrentState(bossPhase);
+                TextBg = GameObject.Find("TextBg");
+                IAdolfResponse = GameObject.Find("IAdolfResponse").GetComponent<Text>();
+                phase2Parent = GameObject.Find("------PHASE 2-------");
+                AnaiAnswers = GameObject.Find("AnaiAnswers");
+                StartCoroutine(ChangePlayerHere(GameObject.FindWithTag("Player")));
+                isSearching = false;
+            }
+
+            if (playerIsHere && bossChat.warmUpDone)
+            {
+                if (responses.Count > 0 && player && bossPhase == ActualPhase.Idle)
+                {
+                    bossPhase = ActualPhase.Init;
+                    ChageCurrentState(bossPhase);
+                }
+            }
+
+            if (bossPhase == ActualPhase.Phase1)
+            {
+                FollowPlayer(moveSpeed, player.transform);
+                if (health <= health * 0.5)
+                {
+                    bossPhase = ActualPhase.Phase2;
+                    ChageCurrentState(bossPhase);
+                }
             }
         }
     }
@@ -134,10 +154,6 @@ public class BossController : MonoBehaviour
                 // IAdolfResponse.text =  responses[countAnswer];
                 IAdolfResponse.text = "Me unire a la red para obtener mas poder";
                 phase2Parent.SetActive(true);
-                foreach (LaserRotate laser in laserController)
-                {
-                    laser.isPhase1 = true;
-                }
                 break;
             case ActualPhase.BadEnding:
                 IAdolfResponse.text = "Oh ya lo esperaba, no eres tan tonto como para dejarte llevar por las emociones";
