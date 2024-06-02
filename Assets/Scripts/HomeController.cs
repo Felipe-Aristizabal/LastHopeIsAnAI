@@ -14,6 +14,7 @@ public class HomeController : MonoBehaviour
     [SerializeField] private Button creditsUIButton;
     [SerializeField] private Button exitGameButton;
     [SerializeField] private Button exitCreditsUIGameButton;
+    [SerializeField] private AudioSource buttonAudio;
 
     void Start()
     {
@@ -36,6 +37,7 @@ public class HomeController : MonoBehaviour
 
     private void StartGame()
     {
+        buttonAudio.Play();
         if (PlayerPrefs.GetInt("IsCompletedTutorial", 0) == 1)
         {
             SceneManager.LoadScene("Level1");
@@ -48,6 +50,7 @@ public class HomeController : MonoBehaviour
 
     private void ExitGame()
     {
+        buttonAudio.Play();
         #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
         #endif
@@ -56,6 +59,7 @@ public class HomeController : MonoBehaviour
 
     private void ChangeActiveUIGameObject(GameObject gameObjectToActive, GameObject gameObjectToDeactive)
     {
+        buttonAudio.Play();
         gameObjectToActive.SetActive(true);
         gameObjectToDeactive.SetActive(false);
     }
