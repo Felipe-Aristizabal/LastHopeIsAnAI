@@ -4,6 +4,7 @@ public class DronLaserController : MonoBehaviour
 {
     [SerializeField] private float speed;
     private Vector2 direction;
+    private AudioSource laserAudio;
 
     void OnEnable()
     {
@@ -19,9 +20,15 @@ public class DronLaserController : MonoBehaviour
             {
                 rb.velocity = direction * speed;
             }
+            // laserAudio.Play();
         }
 
         Invoke("DeactivateLaser", 4f);
+    }
+
+    public void ObtainAudio(GameObject gameObjectSound)
+    {
+        laserAudio = gameObjectSound.GetComponent<AudioSource>();
     }
 
     void RotateTowardsDirection(Vector2 direction)
@@ -32,6 +39,7 @@ public class DronLaserController : MonoBehaviour
 
     public void DeactivateLaser()
     {
+        // laserAudio.Stop();
         gameObject.SetActive(false);
     }
 }

@@ -23,7 +23,6 @@ public class PlayerPowerUps : MonoBehaviour
             6f, 
             2f
         );
-        powerUp.SavePowerUps();
         powerUp.LoadPowerUps();
         powerUp.SetInstance(powerUp);
     }

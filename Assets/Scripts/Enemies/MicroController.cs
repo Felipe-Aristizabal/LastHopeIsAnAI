@@ -7,7 +7,7 @@ public class MicroController : MonoBehaviour
     [SerializeField] private float moveSpeed = 2f;
     [SerializeField] private float randomMoveInterval = 3f;
     [SerializeField] private float explosionDistance = 1f;
-    [SerializeField] private GameObject explosionPrefab;
+    [SerializeField] private float explosionDamage = 40f; 
 
     private Animator animator;
     private Transform player;
@@ -18,7 +18,6 @@ public class MicroController : MonoBehaviour
     private bool isExploding = false;
     private Color originalColor;
     private Vector3 originalScale;
-
 
     void Start()
     {
@@ -50,6 +49,7 @@ public class MicroController : MonoBehaviour
     {
         if (isPlayerInRange)
         {
+            if (isExploding) { return; }
             FollowPlayer();
             if (Vector3.Distance(transform.position, player.position) < explosionDistance)
             {
@@ -105,12 +105,11 @@ public class MicroController : MonoBehaviour
 
     IEnumerator Explode()
     {
+        if (isExploding) yield break;
+
         isExploding = true;
 
-        Color originalColor = spriteRenderer.color;
         Color targetColor = Color.red;
-
-        Vector3 originalScale = transform.localScale;
         Vector3 targetScale = Vector3.Min(originalScale * 1.2f, new Vector3(3f, 3f, 3f));
 
         float elapsedTime = 0f;
@@ -125,9 +124,30 @@ public class MicroController : MonoBehaviour
             yield return null;
         }
 
-        Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+        animator.SetBool("_CanExplode", true);
+        DealDamageToPlayer();
+        AudioSource explosionAudio = GetComponent<AudioSource>();
+        explosionAudio.Play();
 
+        StartCoroutine(DeactivateMe());
+    }
+
+    IEnumerator DeactivateMe()
+    {
+        yield return new WaitForSeconds(0.1f);
         gameObject.SetActive(false);
+    }
+
+    private void DealDamageToPlayer()
+    {
+        if (Vector3.Distance(transform.position, player.position) < explosionDistance)
+        {
+            PlayerController playerController = player.GetComponent<PlayerController>();
+            if (playerController != null)
+            {
+                playerController.TakeDamage((int)explosionDamage);
+            }
+        }
     }
 
     IEnumerator ResetMicroAnimation()
@@ -150,6 +170,7 @@ public class MicroController : MonoBehaviour
         spriteRenderer.color = originalColor;
         transform.localScale = originalScale;
         isExploding = false;
+        animator.SetBool("_CanExplode", false); // Reset animator parameter
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -158,6 +179,14 @@ public class MicroController : MonoBehaviour
         {
             isPlayerInRange = true;
             animator.SetBool("isRunning", true); 
+        }
+        else if (other.CompareTag("BoundCollider"))
+        {
+            ChangeRandomDirection();
+        } 
+        else if (other.CompareTag("ExternalBounds"))
+        {
+            gameObject.SetActive(false);
         }
     }
 

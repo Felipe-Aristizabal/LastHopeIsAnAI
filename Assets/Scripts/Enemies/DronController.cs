@@ -183,6 +183,16 @@ public class DronController : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             isChasingPlayer = true;
+            AudioSource cronAudio = GetComponent<AudioSource>();
+            cronAudio.Play();
+        }
+        else if (other.CompareTag("BoundCollider"))
+        {
+            ChangeRandomDirection();
+        }
+        else if (other.CompareTag("ExternalBounds"))
+        {
+            gameObject.SetActive(false);
         }
     }
 
@@ -191,6 +201,8 @@ public class DronController : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             isChasingPlayer = false;
+            AudioSource cronAudio = GetComponent<AudioSource>();
+            cronAudio.Stop();
         }
     }
 
