@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb2D;
     private Animator myAnimator;
     private SpriteRenderer mySpriteRenderer;
-    private float meleeAttackCooldown = 0f;
+    private float meleeAttackCooldown = 1f;
     private bool isMeleeAttacking = false;
     private bool isInvulnerable = false;
 
@@ -30,6 +31,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private BoxCollider2D meleeColliderLeft;
     [SerializeField] private BoxCollider2D meleeColliderRight;
 
+    private GameObject feedbackDie;
+    private GameObject feedbackWin;
+
     private List<GameObject> projectilePool;
     private GameObject poolParent;
     private GameObject hud;
@@ -37,7 +41,8 @@ public class PlayerController : MonoBehaviour
     private GameObject rangeImage;
     private float nextFireTime = 0f;
     public int enemiesDefeated = 0;
-
+    private Transform spawnBoss;
+    float currentTime = 0;
 
     private void Awake()
     {
@@ -54,6 +59,42 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        feedbackDie = GameObject.Find("Feedback Dead");
+        feedbackDie.SetActive(false);
+        playerPowerUps = GetComponent<PlayerPowerUps>();
+        if (playerPowerUps == null) UnityEngine.Debug.LogError("PlayerPowerUps component is missing!");
+
+        if (playerPowerUps != null && playerPowerUps.powerUp != null)
+        {
+            moveSpeed = playerPowerUps.powerUp.MoveSpeed;
+            health = playerPowerUps.powerUp.Health;
+        }
+        else
+        {
+            UnityEngine.Debug.LogError("PlayerPowerUps component or PowerUp instance is missing!");
+        }
+
+        InitializeProjectilePool();
+
+        meleeColliderLeft.enabled = false;
+        meleeColliderRight.enabled = false;
+
+        hud = GameObject.FindGameObjectWithTag("HUD");
+        if (hud != null && hud.transform.childCount >= 2)
+        {
+            meleeImage = hud.transform.GetChild(1).GetChild(1).gameObject;
+            rangeImage = hud.transform.GetChild(1).GetChild(0).gameObject;
+            UpdateAttackModeUI();
+        }
+        else
+        {
+            UnityEngine.Debug.LogError("HUD not found or does not have the expected structure!");
+        }
+    }
+    void Again()
+    {
+        feedbackDie = GameObject.Find("Feedback Dead");
+        feedbackDie.SetActive(false);
         playerPowerUps = GetComponent<PlayerPowerUps>();
         if (playerPowerUps == null) UnityEngine.Debug.LogError("PlayerPowerUps component is missing!");
 
@@ -94,11 +135,18 @@ public class PlayerController : MonoBehaviour
     {
         PlayerInput();
     }
-
+    private bool ready = true;
     private void FixedUpdate()
     {
         Move();
         AdjustPlayerFacingDirection();
+        if (SceneManager.GetActiveScene().name == "Boss" && ready)
+        {
+            spawnBoss = GameObject.Find("SpawnPlayer").transform;
+            transform.position = spawnBoss.transform.position;
+            Again();
+            ready = false;
+        }
     }
 
     private void PlayerInput()
@@ -113,10 +161,12 @@ public class PlayerController : MonoBehaviour
             SwitchAttackMode();
         }
 
-        if (Input.GetMouseButtonDown(0)) // Left click to attack
+        if (Input.GetMouseButtonDown(0)) // Right click to switch modes
         {
             Attack();
         }
+
+
     }
 
     private void SwitchAttackMode()
@@ -148,11 +198,6 @@ public class PlayerController : MonoBehaviour
 
     private void Attack()
     {
-        if (Time.time < meleeAttackCooldown)
-        {
-            return;
-        }
-
         if (currentAttackMode == AttackMode.Melee)
         {
             myAnimator.SetBool("IsMeleeAttacking", true);
@@ -181,7 +226,7 @@ public class PlayerController : MonoBehaviour
             meleeCollider.isTrigger = true;
             meleeCollider.GetComponent<MeleeCollider>().Initialize(this);
 
-            yield return new WaitForSeconds(0.4f);
+            yield return new WaitForSeconds(0.4f); //!ESTO LO CAMBIO PABLO
             meleeCollider.enabled = false;
             isInvulnerable = false;
             myAnimator.SetBool("IsMeleeAttacking", false);
@@ -200,6 +245,14 @@ public class PlayerController : MonoBehaviour
             if (enemyController != null)
             {
                 enemyController.TakeDamage(playerPowerUps.powerUp.FireDamage);
+            }
+        }
+        if (other.CompareTag("Boss"))
+        {
+            BossController bossController = other.GetComponent<BossController>();
+            if (bossController != null)
+            {
+                bossController.RecivesDamage(playerPowerUps.powerUp.FireDamage);
             }
         }
     }
@@ -398,12 +451,15 @@ public class PlayerController : MonoBehaviour
     private void Die()
     {
         OnPlayerDeath?.Invoke();
+
+        feedbackDie.SetActive(true);
         gameObject.SetActive(false);
     }
 
     public void EnemyDefeated()
     {
         enemiesDefeated++;
+        UnityEngine.Debug.Log(enemiesDefeated);
         GameController.Instance.CheckAndAssignPowerUp(enemiesDefeated);
     }
 }

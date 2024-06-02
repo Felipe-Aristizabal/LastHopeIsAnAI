@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &9155421370978557948
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9084546198429301700}
+  - component: {fileID: 2610995251784542365}
+  - component: {fileID: 7239242274322836975}
+  m_Layer: 0
+  m_Name: GameController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9084546198429301700
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9155421370978557948}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 5.5675335, y: 2.1919484, z: -0.21685004}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2610995251784542365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9155421370978557948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 779547fc4059c684a99e43e57a8a0a5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spritesPowerUps:
+  - {fileID: -279221436, guid: 8d28e3dcb3b4a7e45929e8018b150407, type: 3}
+  - {fileID: 1166165683, guid: 8d28e3dcb3b4a7e45929e8018b150407, type: 3}
+  - {fileID: -505150732, guid: 8d28e3dcb3b4a7e45929e8018b150407, type: 3}
+  - {fileID: -645854527, guid: 8d28e3dcb3b4a7e45929e8018b150407, type: 3}
+  - {fileID: -1486549093, guid: 8d28e3dcb3b4a7e45929e8018b150407, type: 3}
+  - {fileID: 1958446381, guid: 8d28e3dcb3b4a7e45929e8018b150407, type: 3}
+  - {fileID: -1523684793, guid: 8d28e3dcb3b4a7e45929e8018b150407, type: 3}
+  stringsPowerUps:
+  - +Speed
+  - +MeleeDamage
+  - +RangeDistance
+  - +Health
+  - +DistanceAttackSpeed
+  - +DistanceAttack
+  - +CanDash
+  enemyAmount: 0
+--- !u!114 &7239242274322836975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9155421370978557948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4db0860cd2d77d4194b75112582ec1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dronPrefab: {fileID: 5342186717812775953, guid: c284066eed3496141a3ee81c18a30e4a, type: 3}
+  microPrefab: {fileID: 1755350051150524712, guid: 950b52a162336cf4f9dacbc57910936c, type: 3}
+  initialSpawnCount: 5
+  respawnDelay: 1

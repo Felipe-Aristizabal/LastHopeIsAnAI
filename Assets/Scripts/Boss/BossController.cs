@@ -29,7 +29,7 @@ public class BossController : MonoBehaviour
     private Transform phase2Pos;
     private GameObject phase2Parent;
 
-
+    public GameObject canva;
     private List<string> responses = new List<string>();
     private Rigidbody2D rigidbody2D;
     private GameObject player;
@@ -37,6 +37,7 @@ public class BossController : MonoBehaviour
     private GameObject AnaiAnswers;
     private bool isBossScene = false;
     private bool isSearching = true;
+    private SpriteRenderer spriteRenderer;
     public int PlayerAnswer
     {
         get { return playerAnswer; }
@@ -65,6 +66,8 @@ public class BossController : MonoBehaviour
     void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer.enabled = false;
     }
     void Start()
     {
@@ -91,7 +94,6 @@ public class BossController : MonoBehaviour
             {
                 isComplete = true;
                 Debug.Log("Acabe SIUUUU");
-                TextBg.SetActive(true);
             }
         }
     }
@@ -104,7 +106,7 @@ public class BossController : MonoBehaviour
             dialogueGenerated = true;
         }
 
-        if (SceneManager.GetActiveScene().name == "BossScene")
+        if (SceneManager.GetActiveScene().name == "Boss")
         {
             isBossScene = true;
         }
@@ -118,6 +120,9 @@ public class BossController : MonoBehaviour
                 AnaiAnswers = GameObject.Find("AnaiAnswers");
                 phase2Pos = GameObject.Find("PosPhase2").transform;
                 StartCoroutine(ChangePlayerHere(GameObject.FindWithTag("Player")));
+                spriteRenderer.enabled = true;
+                IAdolfResponse.text = responses[0];
+                canva.SetActive(true);
                 isSearching = false;
             }
 
@@ -134,6 +139,7 @@ public class BossController : MonoBehaviour
             if (bossPhase == ActualPhase.Phase1)
             {
                 Debug.Log($"IN {health}");
+                player = GameObject.Find("Player");
                 FollowPlayer(moveSpeed, player.transform);
                 if (health <= 175)
                 {

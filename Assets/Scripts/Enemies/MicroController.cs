@@ -7,7 +7,7 @@ public class MicroController : MonoBehaviour
     [SerializeField] private float moveSpeed = 2f;
     [SerializeField] private float randomMoveInterval = 3f;
     [SerializeField] private float explosionDistance = 1f;
-    [SerializeField] private float explosionDamage = 40f; 
+    [SerializeField] private float explosionDamage = 40f;
 
     private Animator animator;
     private Transform player;
@@ -56,7 +56,7 @@ public class MicroController : MonoBehaviour
                 StartCoroutine(Explode());
             }
         }
-        else 
+        else
         {
             RandomMove();
         }
@@ -178,26 +178,26 @@ public class MicroController : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             isPlayerInRange = true;
-            animator.SetBool("isRunning", true); 
+            animator.SetBool("isRunning", true);
         }
         else if (other.CompareTag("BoundCollider"))
         {
             ChangeRandomDirection();
-        } 
+        }
         else if (other.CompareTag("ExternalBounds"))
         {
             gameObject.SetActive(false);
         }
     }
 
-    void OnTriggerExit2D(Collider2D other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            isPlayerInRange = false;
-            animator.SetBool("isRunning", false); 
-            StopAllCoroutines(); // Stop the explode coroutine if it's running
-            StartCoroutine(ResetMicroAnimation());
-        }
-    }
+    // void OnTriggerExit2D(Collider2D other)
+    // {
+    //     if (other.CompareTag("Player"))
+    //     {
+    //         isPlayerInRange = false;
+    //         animator.SetBool("isRunning", false); 
+    //         StopAllCoroutines(); // Stop the explode coroutine if it's running
+    //         StartCoroutine(ResetMicroAnimation());
+    //     }
+    // }
 }

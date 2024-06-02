@@ -14,11 +14,12 @@ public class GameController : MonoBehaviour
     [SerializeField] private List<Sprite> spritesPowerUps;
     [SerializeField] private List<string> stringsPowerUps;
 
-
+    [SerializeField] private int enemyAmount;
     private Dictionary<string, Sprite> powerUpDictionary;
     private Dictionary<string, bool> sceneStates = new Dictionary<string, bool>
     {
         { "Tutorial", true },
+        {"Home", false },
         { "Level1", false },
         { "Level2", false },
         { "Boss", false }
@@ -81,7 +82,7 @@ public class GameController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (playerGameObject.GetComponent<PlayerController>().enemiesDefeated > 1 && canPass)
+        if (playerGameObject.GetComponent<PlayerController>().enemiesDefeated > 15 && canPass)
         {
             ChangeScene("Boss");
             canPass = false;
@@ -172,7 +173,10 @@ public class GameController : MonoBehaviour
         }
         return null;
     }
-
+    public void Exit()
+    {
+        Application.Quit();
+    }
     private void AssignRandomPowerUps()
     {
         GameObject powerUpParent = GameObject.FindGameObjectWithTag("AnimationPowerUp");

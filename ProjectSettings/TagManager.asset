@@ -3,15 +3,30 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - LaserParent
+  - Laser
+  - DronParent
+  - Enemy
+  - AnimationPowerUp
+  - MeleeAttack
+  - MeleeCollider
+  - LaserBoss
+  - Boss
+  - BoundCollider
+  - PlayerRangedPool
+  - MicroParent
+  - SpawnpointEnemy
+  - HUD
+  - ExternalBounds
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Throwable objects
   - Water
   - UI
-  - 
+  - Boss
   - 
   - 
   - 
@@ -40,4 +55,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: HUD
+    uniqueID: 2198329595
     locked: 0
