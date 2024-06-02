@@ -1,15 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
-    public static GameController Instance { get; private set;}
+    public static GameController Instance { get; private set; }
     private GameObject gameOverUI;
     private GameObject playerGameObject;
-    
+
     [SerializeField] private List<Sprite> spritesPowerUps;
     [SerializeField] private List<string> stringsPowerUps;
 
@@ -20,8 +21,9 @@ public class GameController : MonoBehaviour
         { "Tutorial", true },
         { "Level1", false },
         { "Level2", false },
-        { "Bossfight", false }
+        { "Boss", false }
     };
+    private bool canPass;
 
     void Awake()
     {
@@ -49,6 +51,7 @@ public class GameController : MonoBehaviour
         }
 
         playerGameObject = GameObject.FindGameObjectWithTag("Player");
+        canPass = true;
 
     }
 
@@ -76,6 +79,15 @@ public class GameController : MonoBehaviour
         }
     }
 
+    private void FixedUpdate()
+    {
+        if (playerGameObject.GetComponent<PlayerController>().enemiesDefeated > 1 && canPass)
+        {
+            ChangeScene("Boss");
+            canPass = false;
+        }
+    }
+
     private void TogglePause()
     {
         GameObject buttonPausePrefab = GameObject.Find("ButtonPause");
@@ -91,12 +103,12 @@ public class GameController : MonoBehaviour
 
         if (Time.timeScale == 1)
         {
-            Time.timeScale = 0; 
+            Time.timeScale = 0;
             Debug.Log("Game Paused");
         }
         else
         {
-            Time.timeScale = 1; 
+            Time.timeScale = 1;
             Debug.Log("Game Resumed");
         }
     }
@@ -108,7 +120,8 @@ public class GameController : MonoBehaviour
         gameOverUI.SetActive(true);
         Button buttonRestartGame = gameOverUI.GetComponentInChildren<Button>();
 
-        buttonRestartGame.onClick.AddListener(() => {
+        buttonRestartGame.onClick.AddListener(() =>
+        {
             RestartGame();
         });
     }
@@ -204,14 +217,16 @@ public class GameController : MonoBehaviour
                         if (childImage != null)
                         {
                             childImage.sprite = randomSprite;
-                        } else { Debug.LogWarning("Child GameObject does not have an Image component."); }
+                        }
+                        else { Debug.LogWarning("Child GameObject does not have an Image component."); }
 
                         child.gameObject.SetActive(true);
 
                         if (childButton != null)
                         {
                             AssignButtonListener(childButton, randomString);
-                        } else { Debug.LogWarning("Child GameObject does not have a Button component."); }
+                        }
+                        else { Debug.LogWarning("Child GameObject does not have a Button component."); }
 
                         assigned = true;
                     }
@@ -264,19 +279,19 @@ public class GameController : MonoBehaviour
         switch (powerUp)
         {
             case "+Speed":
-                return playerPowerUp.MoveSpeed < playerPowerUp.ReturnMaxMoveSpeed(); 
+                return playerPowerUp.MoveSpeed < playerPowerUp.ReturnMaxMoveSpeed();
             case "+MeleeDamage":
-                return playerPowerUp.BaseDamage < playerPowerUp.ReturnMaxBaseDamage(); 
+                return playerPowerUp.BaseDamage < playerPowerUp.ReturnMaxBaseDamage();
             case "+RangeDistance":
                 return playerPowerUp.FireRange < playerPowerUp.ReturnMaxFireRange();
             case "+Health":
                 return playerPowerUp.Health < playerPowerUp.ReturnMaxHealth();
             case "+DistanceAttackSpeed":
-                return playerPowerUp.FireRate > playerPowerUp.ReturnMaxFireRate(); 
+                return playerPowerUp.FireRate > playerPowerUp.ReturnMaxFireRate();
             case "+DistanceAttack":
-                return playerPowerUp.FireDamage < playerPowerUp.ReturnMaxFireDamage(); 
+                return playerPowerUp.FireDamage < playerPowerUp.ReturnMaxFireDamage();
             case "+CanDash":
-                return !playerPowerUp.ReturnCanTeleport(); 
+                return !playerPowerUp.ReturnCanTeleport();
             default:
                 Debug.LogWarning($"PowerUp {powerUp} not recognized.");
                 return false;
@@ -288,37 +303,44 @@ public class GameController : MonoBehaviour
         switch (powerUp)
         {
             case "+Speed":
-                button.onClick.AddListener(() => {
+                button.onClick.AddListener(() =>
+                {
                     IncreaseMoveSpeed(1f);
                 });
                 break;
             case "+MeleeDamage":
-                button.onClick.AddListener(() => {
+                button.onClick.AddListener(() =>
+                {
                     IncreaseDamage(1f);
                 });
                 break;
             case "+RangeDistance":
-                button.onClick.AddListener(() => {
+                button.onClick.AddListener(() =>
+                {
                     IncreaseFireRange(1f);
                 });
                 break;
             case "+Health":
-                button.onClick.AddListener(() => {
+                button.onClick.AddListener(() =>
+                {
                     IncreaseHealth(10f);
                 });
                 break;
             case "+DistanceAttackSpeed":
-                button.onClick.AddListener(() => {
+                button.onClick.AddListener(() =>
+                {
                     IncreaseFireRate(0.1f);
                 });
                 break;
             case "+DistanceAttack":
-                button.onClick.AddListener(() => {
+                button.onClick.AddListener(() =>
+                {
                     IncreaseFireDamege(1f);
                 });
                 break;
             case "+CanDash":
-                button.onClick.AddListener(() => {
+                button.onClick.AddListener(() =>
+                {
                     UnlockTeleport();
                 });
                 break;
@@ -330,72 +352,79 @@ public class GameController : MonoBehaviour
 
     private void IncreaseMoveSpeed(float amount)
     {
-        PowerUp powerUp = playerGameObject.GetComponent<PlayerPowerUps>()?.powerUp; 
+        PowerUp powerUp = playerGameObject.GetComponent<PlayerPowerUps>()?.powerUp;
         if (powerUp != null)
         {
             powerUp.IncreaseMoveSpeed(amount);
             DeactivateAllCardGameObjects();
-        } else { Debug.Log("I can not increase Movespeed"); }  
+        }
+        else { Debug.Log("I can not increase Movespeed"); }
     }
 
     private void IncreaseDamage(float amount)
     {
-        PowerUp powerUp = playerGameObject.GetComponent<PlayerPowerUps>()?.powerUp; 
+        PowerUp powerUp = playerGameObject.GetComponent<PlayerPowerUps>()?.powerUp;
         if (powerUp != null)
         {
             powerUp.IncreaseDamage(amount);
             DeactivateAllCardGameObjects();
-        } else { Debug.Log("I can not increase Damage"); }  
+        }
+        else { Debug.Log("I can not increase Damage"); }
     }
 
     private void IncreaseFireRange(float amount)
     {
-        PowerUp powerUp = playerGameObject.GetComponent<PlayerPowerUps>()?.powerUp; 
+        PowerUp powerUp = playerGameObject.GetComponent<PlayerPowerUps>()?.powerUp;
         if (powerUp != null)
         {
             powerUp.IncreaseFireRange(amount);
             DeactivateAllCardGameObjects();
-        } else { Debug.Log("I can not increase Firerange"); }  
+        }
+        else { Debug.Log("I can not increase Firerange"); }
     }
 
     private void IncreaseHealth(float amount)
     {
-        PowerUp powerUp = playerGameObject.GetComponent<PlayerPowerUps>()?.powerUp; 
+        PowerUp powerUp = playerGameObject.GetComponent<PlayerPowerUps>()?.powerUp;
         if (powerUp != null)
         {
             powerUp.IncreaseHealth(amount);
             DeactivateAllCardGameObjects();
-        } else { Debug.Log("I can not increase Health"); }  
+        }
+        else { Debug.Log("I can not increase Health"); }
     }
 
     private void IncreaseFireRate(float amount)
     {
-        PowerUp powerUp = playerGameObject.GetComponent<PlayerPowerUps>()?.powerUp; 
+        PowerUp powerUp = playerGameObject.GetComponent<PlayerPowerUps>()?.powerUp;
         if (powerUp != null)
         {
             powerUp.IncreaseFireRate(amount);
             DeactivateAllCardGameObjects();
-        } else { Debug.Log("I can not increase FireRate"); }  
+        }
+        else { Debug.Log("I can not increase FireRate"); }
     }
 
     private void IncreaseFireDamege(float amount)
     {
-        PowerUp powerUp = playerGameObject.GetComponent<PlayerPowerUps>()?.powerUp; 
+        PowerUp powerUp = playerGameObject.GetComponent<PlayerPowerUps>()?.powerUp;
         if (powerUp != null)
         {
             powerUp.IncreaseFireDamage(amount);
             DeactivateAllCardGameObjects();
-        } else { Debug.Log("I can not increase FireDamage"); }  
+        }
+        else { Debug.Log("I can not increase FireDamage"); }
     }
 
     private void UnlockTeleport()
     {
-        PowerUp powerUp = playerGameObject.GetComponent<PlayerPowerUps>()?.powerUp; 
+        PowerUp powerUp = playerGameObject.GetComponent<PlayerPowerUps>()?.powerUp;
         if (powerUp != null)
         {
             powerUp.UnlockTeleport();
             DeactivateAllCardGameObjects();
-        } else { Debug.Log("I can not increase CanDash"); }  
+        }
+        else { Debug.Log("I can not increase CanDash"); }
     }
 
     public void RestartGame()

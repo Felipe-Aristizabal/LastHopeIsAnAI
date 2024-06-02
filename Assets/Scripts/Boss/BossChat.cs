@@ -13,7 +13,10 @@ namespace LLMUnitySamples
         public bool warmUpDone = false;
         private string lastResponse;
 
-
+        void Awake()
+        {
+            DontDestroyOnLoad(this.gameObject);
+        }
 
         void Start()
         {

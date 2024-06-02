@@ -36,7 +36,7 @@ public class PlayerController : MonoBehaviour
     private GameObject meleeImage;
     private GameObject rangeImage;
     private float nextFireTime = 0f;
-    private int enemiesDefeated = 0;
+    public int enemiesDefeated = 0;
 
 
     private void Awake()
@@ -49,6 +49,7 @@ public class PlayerController : MonoBehaviour
         if (rb2D == null) UnityEngine.Debug.LogError("Rigidbody2D is missing!");
         if (myAnimator == null) UnityEngine.Debug.LogError("Animator is missing!");
         if (mySpriteRenderer == null) UnityEngine.Debug.LogError("SpriteRenderer is missing!");
+        DontDestroyOnLoad(this.gameObject);
     }
 
     private void Start()
@@ -214,7 +215,7 @@ public class PlayerController : MonoBehaviour
             Vector2 direction = (mousePosition - selectedFirePoint.position).normalized;
 
             rangedAttack.transform.position = selectedFirePoint.position;
-            rangedAttack.transform.rotation = Quaternion.identity;  
+            rangedAttack.transform.rotation = Quaternion.identity;
 
             ProjectilePlayer projectileScript = rangedAttack.GetComponent<ProjectilePlayer>();
             if (projectileScript != null)

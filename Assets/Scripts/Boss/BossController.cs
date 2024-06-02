@@ -62,7 +62,10 @@ public class BossController : MonoBehaviour
 
     public ActualPhase bossPhase;
 
-
+    void Awake()
+    {
+        DontDestroyOnLoad(this.gameObject);
+    }
     void Start()
     {
         health = 350;
