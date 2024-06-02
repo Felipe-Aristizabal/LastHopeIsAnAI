@@ -23,12 +23,12 @@ public class BossController : MonoBehaviour
     [SerializeField] private int countAnswer = 0;
     [SerializeField] private int playerAnswer;
     [SerializeField] private bool playerIsHere;
+    [SerializeField] private GameObject phase2Parent;
     [SerializeField] private List<LaserRotate> laserController = new List<LaserRotate>();
 
     private List<string> responses = new List<string>();
     private Rigidbody2D rigidbody2D;
     private GameObject player;
-
     private bool dialogueGenerated = false;
 
     public int PlayerAnswer
@@ -82,12 +82,13 @@ public class BossController : MonoBehaviour
             {
                 isComplete = true;
                 Debug.Log("Acabe SIUUUU");
+                TextBg.SetActive(true);
             }
         }
 
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (bossChat.warmUpDone && !dialogueGenerated)
         {
@@ -96,7 +97,7 @@ public class BossController : MonoBehaviour
         }
         if (playerIsHere && bossChat.warmUpDone)
         {
-            if (responses.Count > 0 && player)
+            if (responses.Count > 0 && player && bossPhase == ActualPhase.Idle)
             {
                 bossPhase = ActualPhase.Init;
                 ChageCurrentState(bossPhase);
@@ -109,6 +110,7 @@ public class BossController : MonoBehaviour
             if (health <= health * 0.5)
             {
                 bossPhase = ActualPhase.Phase2;
+                ChageCurrentState(bossPhase);
             }
         }
     }
@@ -124,17 +126,18 @@ public class BossController : MonoBehaviour
                 SpeeckingWithPlayer(PlayerAnswer);
                 break;
             case ActualPhase.Phase1:
-                TextBg.SetActive(false);
+
                 break;
             case ActualPhase.Phase2:
+                TextBg.SetActive(true);
+                StartCoroutine(HideText(5));
+                // IAdolfResponse.text =  responses[countAnswer];
+                IAdolfResponse.text = "Me unire a la red para obtener mas poder";
+                phase2Parent.SetActive(true);
                 foreach (LaserRotate laser in laserController)
                 {
                     laser.isPhase1 = true;
                 }
-                break;
-            case ActualPhase.Phase3:
-                Debug.Log($"Im in {phase}");
-                //The boss is Speaking
                 break;
             case ActualPhase.BadEnding:
                 IAdolfResponse.text = "Oh ya lo esperaba, no eres tan tonto como para dejarte llevar por las emociones";
@@ -165,6 +168,7 @@ public class BossController : MonoBehaviour
             {
                 bossPhase = ActualPhase.Phase1;
                 ChageCurrentState(bossPhase);
+                StartCoroutine(HideText(5.0f));
             }
             else
             {
@@ -203,7 +207,6 @@ public class BossController : MonoBehaviour
 
     IEnumerator HideText(float value)
     {
-        TextBg.SetActive(true);
         yield return new WaitForSeconds(value);
         TextBg.SetActive(false);
     }

@@ -85,25 +85,12 @@ public class LaserRotate : MonoBehaviour
 
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    public void RecivesDamage(float value)
     {
-        if (type == LaserType.Laser1)
-        {
-            if (other.CompareTag("MeleeDamage"))
-            {
-                healt -= 5;
-            }
-        }
-        else
-        {
-            if (other.CompareTag("MeleeDamage"))
-            {
-                healt -= 3;
-            }
-        }
+        healt -= value;
     }
 
-
+    //*LASER TYPE 2 LOGIC
     private IEnumerator RotateWithCooldown(float cooldownRotation, float minAngle, float maxAngle)
     {
         while (true)
