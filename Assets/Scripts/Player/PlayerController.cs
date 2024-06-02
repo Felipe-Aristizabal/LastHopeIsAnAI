@@ -288,7 +288,7 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.CompareTag("MeleeCollider"))
+        if (other.gameObject.CompareTag("MeleeCollider") || other.gameObject.CompareTag("BoundCollider"))
         {
             return;
         }
