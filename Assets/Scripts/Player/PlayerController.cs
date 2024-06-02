@@ -7,7 +7,7 @@ using System.Diagnostics;
 public class PlayerController : MonoBehaviour
 {
     private float moveSpeed;
-    private int health;
+    public int health;
     private PlayerControls playerControls;
     private Vector2 movement;
     private Rigidbody2D rb2D;
@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
     private bool isInvulnerable = false;
 
     public static event Action OnPlayerDeath;
-    private PlayerPowerUps playerPowerUps;
+    public PlayerPowerUps playerPowerUps;
     private bool isTakingDamage = false;
 
     private enum AttackMode { Melee, Ranged }
@@ -32,7 +32,12 @@ public class PlayerController : MonoBehaviour
 
     private List<GameObject> projectilePool;
     private GameObject poolParent;
+    private GameObject hud;
+    private GameObject meleeImage;
+    private GameObject rangeImage;
     private float nextFireTime = 0f;
+    private int enemiesDefeated = 0;
+
 
     private void Awake()
     {
@@ -65,6 +70,18 @@ public class PlayerController : MonoBehaviour
 
         meleeColliderLeft.enabled = false;
         meleeColliderRight.enabled = false;
+
+        hud = GameObject.FindGameObjectWithTag("HUD");
+        if (hud != null && hud.transform.childCount >= 2)
+        {
+            meleeImage = hud.transform.GetChild(1).GetChild(1).gameObject;
+            rangeImage = hud.transform.GetChild(1).GetChild(0).gameObject;
+            UpdateAttackModeUI();
+        }
+        else
+        {
+            UnityEngine.Debug.LogError("HUD not found or does not have the expected structure!");
+        }
     }
 
     private void OnEnable()
@@ -110,6 +127,21 @@ public class PlayerController : MonoBehaviour
         else
         {
             currentAttackMode = AttackMode.Melee;
+        }
+        UpdateAttackModeUI();
+    }
+
+    private void UpdateAttackModeUI()
+    {
+        if (currentAttackMode == AttackMode.Melee)
+        {
+            meleeImage.SetActive(true);
+            rangeImage.SetActive(false);
+        }
+        else
+        {
+            meleeImage.SetActive(false);
+            rangeImage.SetActive(true);
         }
     }
 
@@ -182,7 +214,7 @@ public class PlayerController : MonoBehaviour
             Vector2 direction = (mousePosition - selectedFirePoint.position).normalized;
 
             rangedAttack.transform.position = selectedFirePoint.position;
-            rangedAttack.transform.rotation = Quaternion.identity;
+            rangedAttack.transform.rotation = Quaternion.identity;  
 
             ProjectilePlayer projectileScript = rangedAttack.GetComponent<ProjectilePlayer>();
             if (projectileScript != null)
@@ -315,7 +347,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void TakeDamage(int damage)
+    public void TakeDamage(int damage)
     {
         if (isInvulnerable)
         {
@@ -366,5 +398,11 @@ public class PlayerController : MonoBehaviour
     {
         OnPlayerDeath?.Invoke();
         gameObject.SetActive(false);
+    }
+
+    public void EnemyDefeated()
+    {
+        enemiesDefeated++;
+        GameController.Instance.CheckAndAssignPowerUp(enemiesDefeated);
     }
 }

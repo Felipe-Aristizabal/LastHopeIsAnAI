@@ -56,6 +56,49 @@ public class GameController : MonoBehaviour
     {
         // Assign the PowerUps if the Player can update
         // AssignRandomPowerUps();
+
+        GameObject buttonPausePrefab = GameObject.Find("ButtonPause");
+        if (buttonPausePrefab != null)
+        {
+            Button pauseButton = buttonPausePrefab.GetComponent<Button>();
+            if (pauseButton != null)
+            {
+                pauseButton.onClick.AddListener(TogglePause);
+            }
+            else
+            {
+                Debug.LogError("Button component is missing on ButtonPause prefab!");
+            }
+        }
+        else
+        {
+            Debug.LogError("ButtonPause prefab not found in the scene!");
+        }
+    }
+
+    private void TogglePause()
+    {
+        GameObject buttonPausePrefab = GameObject.Find("ButtonPause");
+        AudioSource audioSource = buttonPausePrefab.GetComponent<AudioSource>();
+        if (audioSource != null)
+        {
+            audioSource.Play();
+        }
+        else
+        {
+            Debug.LogError("AudioSource component is missing on ButtonPause prefab!");
+        }
+
+        if (Time.timeScale == 1)
+        {
+            Time.timeScale = 0; 
+            Debug.Log("Game Paused");
+        }
+        else
+        {
+            Time.timeScale = 1; 
+            Debug.Log("Game Resumed");
+        }
     }
 
     private void HandlePlayerDeath()
@@ -187,6 +230,32 @@ public class GameController : MonoBehaviour
         }
     }
 
+    public void CheckAndAssignPowerUp(int defeatedEnemies)
+    {
+        if (defeatedEnemies % 5 == 0)
+        {
+            AssignRandomPowerUps();
+        }
+    }
+
+    private void DeactivateAllCardGameObjects()
+    {
+        GameObject cardParent = GameObject.FindGameObjectWithTag("AnimationPowerUp");
+        if (cardParent != null)
+        {
+            foreach (Transform cardTransform in cardParent.transform)
+            {
+                GameObject card = cardTransform.gameObject;
+                card.SetActive(false);
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Card parent with tag 'AnimationPowerUp' not found.");
+        }
+        playerGameObject.GetComponent<PlayerController>().health = playerGameObject.GetComponent<PlayerController>().playerPowerUps.powerUp.Health;
+    }
+
     private bool CanAssignPowerUp(string powerUp)
     {
         PowerUp playerPowerUp = playerGameObject.GetComponent<PlayerPowerUps>()?.powerUp;
@@ -265,6 +334,7 @@ public class GameController : MonoBehaviour
         if (powerUp != null)
         {
             powerUp.IncreaseMoveSpeed(amount);
+            DeactivateAllCardGameObjects();
         } else { Debug.Log("I can not increase Movespeed"); }  
     }
 
@@ -274,6 +344,7 @@ public class GameController : MonoBehaviour
         if (powerUp != null)
         {
             powerUp.IncreaseDamage(amount);
+            DeactivateAllCardGameObjects();
         } else { Debug.Log("I can not increase Damage"); }  
     }
 
@@ -283,6 +354,7 @@ public class GameController : MonoBehaviour
         if (powerUp != null)
         {
             powerUp.IncreaseFireRange(amount);
+            DeactivateAllCardGameObjects();
         } else { Debug.Log("I can not increase Firerange"); }  
     }
 
@@ -292,6 +364,7 @@ public class GameController : MonoBehaviour
         if (powerUp != null)
         {
             powerUp.IncreaseHealth(amount);
+            DeactivateAllCardGameObjects();
         } else { Debug.Log("I can not increase Health"); }  
     }
 
@@ -301,6 +374,7 @@ public class GameController : MonoBehaviour
         if (powerUp != null)
         {
             powerUp.IncreaseFireRate(amount);
+            DeactivateAllCardGameObjects();
         } else { Debug.Log("I can not increase FireRate"); }  
     }
 
@@ -310,6 +384,7 @@ public class GameController : MonoBehaviour
         if (powerUp != null)
         {
             powerUp.IncreaseFireDamage(amount);
+            DeactivateAllCardGameObjects();
         } else { Debug.Log("I can not increase FireDamage"); }  
     }
 
@@ -319,6 +394,7 @@ public class GameController : MonoBehaviour
         if (powerUp != null)
         {
             powerUp.UnlockTeleport();
+            DeactivateAllCardGameObjects();
         } else { Debug.Log("I can not increase CanDash"); }  
     }
 
@@ -326,5 +402,7 @@ public class GameController : MonoBehaviour
     {
         // Implement game restart logic, e.g., reload the scene
         ChangeScene("Tutorial");
+        // Trigger the respawn in EnemySpawner
+        EnemySpawner.Instance.TriggerRespawn();
     }
 }
